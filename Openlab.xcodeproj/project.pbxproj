@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D97692DC845BC6DD61BE570 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 64890B0F658280B134C97C1D /* libPods.a */; };
 		840FEE4F1CB622C70056C7BE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 840FEE4E1CB622C70056C7BE /* main.m */; };
 		840FEE521CB622C80056C7BE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 840FEE511CB622C80056C7BE /* AppDelegate.m */; };
 		840FEE551CB622C80056C7BE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 840FEE541CB622C80056C7BE /* ViewController.m */; };
@@ -15,6 +16,10 @@
 		840FEE5D1CB622C90056C7BE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 840FEE5B1CB622C90056C7BE /* LaunchScreen.storyboard */; };
 		840FEE681CB622C90056C7BE /* OpenlabTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 840FEE671CB622C90056C7BE /* OpenlabTests.m */; };
 		840FEE731CB622C90056C7BE /* OpenlabUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 840FEE721CB622C90056C7BE /* OpenlabUITests.m */; };
+		840FEE881CB62AA60056C7BE /* WsqMD5Util.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840FEE811CB62AA60056C7BE /* WsqMD5Util.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		840FEE891CB62AA60056C7BE /* ElApiService.m in Sources */ = {isa = PBXBuildFile; fileRef = 840FEE841CB62AA60056C7BE /* ElApiService.m */; };
+		840FEE8A1CB62AA60056C7BE /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 840FEE861CB62AA60056C7BE /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		840FEE8E1CB62F130056C7BE /* MyObjectDataBean.m in Sources */ = {isa = PBXBuildFile; fileRef = 840FEE8D1CB62F130056C7BE /* MyObjectDataBean.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +40,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		25F9FEEDBCEE3555D48FCC8A /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		64890B0F658280B134C97C1D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		71DEF7374D70CBA788026FD2 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		840FEE4A1CB622C60056C7BE /* Openlab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Openlab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		840FEE4E1CB622C70056C7BE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		840FEE501CB622C80056C7BE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -51,6 +59,15 @@
 		840FEE6E1CB622C90056C7BE /* OpenlabUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OpenlabUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		840FEE721CB622C90056C7BE /* OpenlabUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenlabUITests.m; sourceTree = "<group>"; };
 		840FEE741CB622C90056C7BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		840FEE811CB62AA60056C7BE /* WsqMD5Util.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WsqMD5Util.mm; sourceTree = "<group>"; };
+		840FEE821CB62AA60056C7BE /* WsqMD5Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WsqMD5Util.h; sourceTree = "<group>"; };
+		840FEE831CB62AA60056C7BE /* ElApiService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ElApiService.h; sourceTree = "<group>"; };
+		840FEE841CB62AA60056C7BE /* ElApiService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ElApiService.m; sourceTree = "<group>"; };
+		840FEE851CB62AA60056C7BE /* GDataDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataDefines.h; sourceTree = "<group>"; };
+		840FEE861CB62AA60056C7BE /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
+		840FEE871CB62AA60056C7BE /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
+		840FEE8C1CB62F130056C7BE /* MyObjectDataBean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyObjectDataBean.h; sourceTree = "<group>"; };
+		840FEE8D1CB62F130056C7BE /* MyObjectDataBean.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyObjectDataBean.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D97692DC845BC6DD61BE570 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +96,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0603348D48258975575E3898 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				25F9FEEDBCEE3555D48FCC8A /* Pods.debug.xcconfig */,
+				71DEF7374D70CBA788026FD2 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		840FEE411CB622C60056C7BE = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +112,8 @@
 				840FEE661CB622C90056C7BE /* OpenlabTests */,
 				840FEE711CB622C90056C7BE /* OpenlabUITests */,
 				840FEE4B1CB622C60056C7BE /* Products */,
+				0603348D48258975575E3898 /* Pods */,
+				9ECB36B1BBDF052D995C6F7F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,6 +130,7 @@
 		840FEE4C1CB622C70056C7BE /* Openlab */ = {
 			isa = PBXGroup;
 			children = (
+				840FEE801CB6280F0056C7BE /* service */,
 				840FEE501CB622C80056C7BE /* AppDelegate.h */,
 				840FEE511CB622C80056C7BE /* AppDelegate.m */,
 				840FEE531CB622C80056C7BE /* ViewController.h */,
@@ -140,6 +170,38 @@
 			path = OpenlabUITests;
 			sourceTree = "<group>";
 		};
+		840FEE801CB6280F0056C7BE /* service */ = {
+			isa = PBXGroup;
+			children = (
+				840FEE8B1CB62EC10056C7BE /* bean */,
+				840FEE811CB62AA60056C7BE /* WsqMD5Util.mm */,
+				840FEE821CB62AA60056C7BE /* WsqMD5Util.h */,
+				840FEE831CB62AA60056C7BE /* ElApiService.h */,
+				840FEE841CB62AA60056C7BE /* ElApiService.m */,
+				840FEE851CB62AA60056C7BE /* GDataDefines.h */,
+				840FEE861CB62AA60056C7BE /* GDataXMLNode.m */,
+				840FEE871CB62AA60056C7BE /* GDataXMLNode.h */,
+			);
+			name = service;
+			sourceTree = "<group>";
+		};
+		840FEE8B1CB62EC10056C7BE /* bean */ = {
+			isa = PBXGroup;
+			children = (
+				840FEE8C1CB62F130056C7BE /* MyObjectDataBean.h */,
+				840FEE8D1CB62F130056C7BE /* MyObjectDataBean.m */,
+			);
+			name = bean;
+			sourceTree = "<group>";
+		};
+		9ECB36B1BBDF052D995C6F7F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				64890B0F658280B134C97C1D /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -147,9 +209,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 840FEE771CB622C90056C7BE /* Build configuration list for PBXNativeTarget "Openlab" */;
 			buildPhases = (
+				27FBFF9C99D907E7C1569469 /* Check Pods Manifest.lock */,
 				840FEE461CB622C60056C7BE /* Sources */,
 				840FEE471CB622C60056C7BE /* Frameworks */,
 				840FEE481CB622C60056C7BE /* Resources */,
+				5DD036343BF98580B638BEFE /* Embed Pods Frameworks */,
+				EB92D04414CAE2FDAFDCE674 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -265,14 +330,66 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		27FBFF9C99D907E7C1569469 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		5DD036343BF98580B638BEFE /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EB92D04414CAE2FDAFDCE674 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		840FEE461CB622C60056C7BE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				840FEE8E1CB62F130056C7BE /* MyObjectDataBean.m in Sources */,
+				840FEE881CB62AA60056C7BE /* WsqMD5Util.mm in Sources */,
+				840FEE891CB62AA60056C7BE /* ElApiService.m in Sources */,
 				840FEE551CB622C80056C7BE /* ViewController.m in Sources */,
 				840FEE521CB622C80056C7BE /* AppDelegate.m in Sources */,
 				840FEE4F1CB622C70056C7BE /* main.m in Sources */,
+				840FEE8A1CB62AA60056C7BE /* GDataXMLNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,10 +526,44 @@
 		};
 		840FEE781CB622C90056C7BE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 25F9FEEDBCEE3555D48FCC8A /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/CustomIOSAlertView\"",
+					"\"${PODS_ROOT}/Headers/Public/MBProgressHUD\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/Toast\"",
+					/usr/include/libxml2,
+				);
 				INFOPLIST_FILE = Openlab/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"CustomIOSAlertView\"",
+					"-l\"MBProgressHUD\"",
+					"-l\"SDWebImage\"",
+					"-l\"Toast\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-lxml2",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.lztech.Openlab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -420,10 +571,44 @@
 		};
 		840FEE791CB622C90056C7BE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 71DEF7374D70CBA788026FD2 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/CustomIOSAlertView\"",
+					"\"${PODS_ROOT}/Headers/Public/MBProgressHUD\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/Toast\"",
+					/usr/include/libxml2,
+				);
 				INFOPLIST_FILE = Openlab/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"CustomIOSAlertView\"",
+					"-l\"MBProgressHUD\"",
+					"-l\"SDWebImage\"",
+					"-l\"Toast\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-lxml2",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = cn.lztech.Openlab;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -496,6 +681,7 @@
 				840FEE791CB622C90056C7BE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		840FEE7A1CB622C90056C7BE /* Build configuration list for PBXNativeTarget "OpenlabTests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +690,7 @@
 				840FEE7C1CB622C90056C7BE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		840FEE7D1CB622C90056C7BE /* Build configuration list for PBXNativeTarget "OpenlabUITests" */ = {
 			isa = XCConfigurationList;
@@ -512,6 +699,7 @@
 				840FEE7F1CB622C90056C7BE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
