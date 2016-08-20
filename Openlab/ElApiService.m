@@ -9,14 +9,18 @@
 #import "ElApiService.h"
 #import "GDataXMLNode.h"
 #import "WsqMD5Util.h"
-
+#import "TimeUtils.h"
 const static int DEFAULT_TIME_OUT=11;
-const static NSString* WEBSERVICE_IP=@"202.38.78.70";
+const static NSString* WEBSERVICE_IP=@"202.38.78.70";//202.38.78.70
 const static int WEBSERVICE_PORT=8080;
-static  NSString* KEY_USERID=@"userID_KEY";
-static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
+const NSString* KEY_USERID=@"userID_KEY";
+const NSString* KEY_SECTOKEN=@"sectoken_KEY";
 
 @interface ElApiService()
+#pragma mark errorCode handler
+@property(nonatomic,strong,readwrite) ErrorCodeHandlerBlock block;
+@property(nonatomic,strong) NSDictionary *errorCodeDictionary;
+
 -(NSData *)requestURLSync:(NSString *)service;
 -(NSData *)requestURL:(NSString *)service;
 -(GDataXMLElement *)getRootElementByData:(NSData *)data;
@@ -32,11 +36,27 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
             shareService=[[ElApiService alloc] init];
             shareService.openlabUrl=[NSString stringWithFormat:@"http://%@:%d/elws/services/openlab/",WEBSERVICE_IP,WEBSERVICE_PORT];
             shareService.authapiUrl=[NSString stringWithFormat:@"http://%@:%d/elws/services/authapi/",WEBSERVICE_IP,WEBSERVICE_PORT];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [shareService readErrorCodePlistFile];
+            });
         }
         return shareService;
     }
     
 }
+-(NSString *)getWebImageURL:(NSString *)imageName{
+    return [NSString stringWithFormat:@"http://%@/openlabweb/upload/%@",WEBSERVICE_IP,imageName];
+}
+-(void)setIWSErrorCodeListenerBlock:(ErrorCodeHandlerBlock)block{
+    self.block=block;
+}
+- (NSString*)urlEncodedString:(NSString *)string
+{
+    NSString * encodedString = (__bridge_transfer  NSString*) CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (__bridge CFStringRef)string, NULL, (__bridge CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8 );
+    
+    return encodedString;
+}
+
 /***********************************
  * webService API begin...
  
@@ -67,7 +87,7 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
             
             return YES;
         }else{
-            [self notificationErrorCode:errorMsgVal];
+            [self notificationErrorCode:errorCodeVal];
         }
         
     }
@@ -95,7 +115,7 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
             
             return YES;
         }else{
-            [self notificationErrorCode:nil];
+            [self notificationErrorCode:errorCodeVal];
         }
         
     }
@@ -110,24 +130,24 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
     NSMutableString *appendStr=[[NSMutableString alloc] init];
     
     if(userType.realName!=nil){
-        [appendStr appendFormat:[NSString stringWithFormat:@"&realName=%@",userType.realName]];
+        [appendStr appendFormat:@"&realName=%@",userType.realName];
     
     }
     if(userType.email!=nil){
-        [appendStr appendFormat:[NSString stringWithFormat:@"&email=%@",userType.email]];
+        [appendStr appendFormat:@"&email=%@",userType.email];
         
         
     }
     if(userType.phone!=nil){
-        [appendStr appendFormat:[NSString stringWithFormat:@"&phone=%@",userType.phone]];
+        [appendStr appendFormat:@"&phone=%@",userType.phone];
         
     }
     if(userType.userRole!=nil){
-        [appendStr appendFormat:[NSString stringWithFormat:@"&userRole=%@",userType.userRole]];
+        [appendStr appendFormat:@"&userRole=%@",userType.userRole];
         
     }
     if(userType.cardId!=nil){
-        [appendStr appendFormat:[NSString stringWithFormat:@"&cardId=%@",userType.cardId]];
+        [appendStr appendFormat:@"&cardId=%@",userType.cardId];
         
     }
     
@@ -148,7 +168,7 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
         if([errorCodeVal isEqualToString:@"0"]){
             return YES;
         }else{
-            [self notificationErrorCode:errorMsgVal];
+            [self notificationErrorCode:errorCodeVal];
         }
         
     }
@@ -193,7 +213,7 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
             
             
         }else{
-            [self notificationErrorCode:errorMsgVal];
+            [self notificationErrorCode:errorCodeVal];
         }
         
     }
@@ -207,10 +227,47 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
  ***********************************
  */
 
+-(NSArray *)getLabCourseList{
+    NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
+    NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
+    NSString *service=[NSString stringWithFormat:@"%@getLabCourseList?senderId=%@&secToken=%@&year=1&semester=1",self.openlabUrl,userID,secToken];
+    
+    
+    NSLog(@"getLabCourseList service:%@",service);
+    NSData *data=[self requestURLSync:service];
+    if(data!=nil){
+        GDataXMLElement *rootElement=[self getRootElementByData:data];
+        
+        NSString* errorCodeVal=[[[rootElement elementsForName:@"errorCode"] objectAtIndex:0] stringValue];
+       
+        if([errorCodeVal isEqualToString:@"0"]){
+            NSArray *courselistNodes=[rootElement elementsForName:@"courselist"];
+            NSMutableArray *courseTypeList=[NSMutableArray new];
+            for (GDataXMLElement *element in courselistNodes) {
+                
+                CourseType *courseType=(CourseType *) [self parseCourseTypeXML:element];
+                
+                [courseTypeList addObject:courseType];
+                
+            }
+            return courseTypeList;
+
+            
+        }
+        
+    }
+    
+
+    
+    
+    return nil;
+}
+
+
 -(NSArray *)getLabListByIncDesk:(BOOL)incDesk{
     NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
     NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
-    NSString *service=[NSString stringWithFormat:@"%@getLabListByIncDesk?senderId=%@&secToken=%@&incDesk=%d",self.openlabUrl,userID,secToken,incDesk];
+    NSString *service=[NSString stringWithFormat:@"%@getLabList?senderId=%@&secToken=%@&incDesk=%d",self.openlabUrl,userID,secToken,incDesk];
     
     
     NSLog(@"getLabListByIncDesk service:%@",service);
@@ -235,6 +292,8 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
             }
             return lablist;
             
+        }else{
+            [self notificationErrorCode:errorCodeVal];
         }
     }
     return nil;
@@ -246,7 +305,7 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
     NSMutableString *appendStr=[[NSMutableString alloc] init];
     
     if(arg2!=nil){
-        [appendStr appendFormat:[NSString stringWithFormat:@"&dueDate=%@",arg2]];
+        [appendStr appendFormat:@"&dueDate=%@",arg2];
         
     }
     
@@ -263,7 +322,7 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
         if([errorCodeVal isEqualToString:@"0"]){
             return YES;
         }else{
-            [self notificationErrorCode:errorMsgVal];
+            [self notificationErrorCode:errorCodeVal];
         }
     }
     return NO;
@@ -277,18 +336,27 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
     NSMutableString *appendStr=[[NSMutableString alloc] init];
     
     if(arg1!=nil){
-        [appendStr appendFormat:[NSString stringWithFormat:@"&desc=%@",arg1]];
+        [appendStr appendFormat:@"&desc=%@",arg1];
         
     }
     if(arg2>0){
-        [appendStr appendFormat:[NSString stringWithFormat:@"&assignmentId=%d",arg2]];
+        [appendStr appendFormat:@"&assignmentId=%d",arg2];
         
     }
     
-    NSString *service=[NSString stringWithFormat:@"%@submitReport?senderId=%@&secToken=%@&courseCode=%@&file=%@%@",self.openlabUrl,userID,secToken,courseCode,arg0,appendStr];
+    NSString *service=[NSString stringWithFormat:@"%@submitReport",self.openlabUrl];
     
     NSLog(@"submitReport service:%@",service);
-    NSData *data=[self requestURLSync:service];
+    NSMutableData *postBody=[[NSMutableData alloc] init];
+    NSString *param=[NSString stringWithFormat:@"senderId=%@&secToken=%@&courseCode=%@&file=%@%@",userID,secToken,courseCode,arg0,appendStr] ;
+    
+    
+    [postBody appendData:[param dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    
+    
+    NSData *data=[self requestURLSyncPOST:service postBody:postBody];
+    
     if(data!=nil){
         GDataXMLElement *rootElement=[self getRootElementByData:data];
         
@@ -298,7 +366,7 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
         if([errorCodeVal isEqualToString:@"0"]){
             return YES;
         }else{
-            [self notificationErrorCode:errorMsgVal];
+            [self notificationErrorCode:errorCodeVal];
         }
     }
     return NO;
@@ -334,7 +402,7 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
             
             
         }else{
-            [self notificationErrorCode:errorMsgVal];
+            [self notificationErrorCode:errorCodeVal];
         }
     }
     
@@ -342,18 +410,20 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
     
 }
 
--(NSArray *)getAssignmentList:(NSString *)courseCode{
+-(Turple *)getAssignmentList:(NSString *)courseCode{
     NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
     NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
     
     NSMutableString *appendStr=[[NSMutableString alloc] init];
+    Turple *turple=[[Turple alloc] init];
+    
     
     if(courseCode!=nil){
-        [appendStr appendFormat:[NSString stringWithFormat:@"&courseCode=%@",courseCode]];
+        [appendStr appendFormat:@"&courseCode=%@",courseCode];
         
     }
     
-    NSString *service=[NSString stringWithFormat:@"%@getAssignmentList?senderId=%@&secToken=%@&userId=%@%@",self.openlabUrl,userID,secToken,userID,appendStr];
+    NSString *service=[NSString stringWithFormat:@"%@getAassignmentList?senderId=%@&secToken=%@&userId=%@%@",self.openlabUrl,userID,secToken,userID,appendStr];
     
     NSLog(@"getAssignmentList service:%@",service);
     NSData *data=[self requestURLSync:service];
@@ -366,7 +436,10 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
         if([errorCodeVal isEqualToString:@"0"]){
             NSArray *assignmentListNodes=[rootElement elementsForName:@"assignmentList"];
             
+            NSArray *reportListNodes=[rootElement elementsForName:@"reportList"];
+            
             NSMutableArray *assignmentList=[[NSMutableArray alloc] init];
+            NSMutableArray *reportList=[[NSMutableArray alloc] init];
             
             for (GDataXMLElement *element in assignmentListNodes) {
                 
@@ -375,11 +448,21 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
                 [assignmentList addObject:assignmentType];
                 
             }
-            return assignmentList;
             
+            for (GDataXMLElement *element in reportListNodes) {
+                
+                ReportInfo *reportInfo=(ReportInfo *) [self parseReportInfoXML:element];
+                
+                [reportList addObject:reportInfo];
+                
+            }
             
+            turple.assignmentTypes=assignmentList;
+            turple.reportInfos=reportList;
+            
+            return turple;
         }else{
-            [self notificationErrorCode:errorMsgVal];
+            [self notificationErrorCode:errorCodeVal];
         }
     }
 
@@ -394,7 +477,7 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
     NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
     
     
-    NSString *service=[NSString stringWithFormat:@"%@addOrUpdReservation?senderId=%@&secToken=%@&userId=%@&userName=%@&startTime=%@&endTime=%@&deskNum=%d&labId=%d&status=%d&resvId=%d",self.openlabUrl,userID,secToken,userID,userName,arg0,arg1,arg2,arg3,arg4,arg5];
+    NSString *service=[NSString stringWithFormat:@"%@addOrUpdReservation?senderId=%@&secToken=%@&userId=%@&userName=%@&startTime=%@&endTime=%@&deskNum=%d&labId=%d&status=%d&resvId=%d",self.openlabUrl,userID,secToken,userID,userName,[arg0 stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],[arg1 stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],arg2,arg3,arg4,arg5];
     
     NSLog(@"addOrUpdReservation service:%@",service);
     NSData *data=[self requestURLSync:service];
@@ -407,7 +490,7 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
         if([errorCodeVal isEqualToString:@"0"]){
             return YES;
         }else{
-            [self notificationErrorCode:errorMsgVal];
+            [self notificationErrorCode:errorCodeVal];
         }
     }
 
@@ -423,6 +506,18 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
  *  end ...
  ***********************************************************
  */
+-(ReportInfo *)parseReportInfoXML:(GDataXMLElement *)element{
+    ReportInfo *reportInfo=[[ReportInfo alloc] init];
+    reportInfo.reportId=[[[[element elementsForName:@"reportId"] objectAtIndex:0] stringValue] intValue];
+    reportInfo.userId=[[[[element elementsForName:@"userId"] objectAtIndex:0] stringValue] intValue];
+    reportInfo.assignmentId=[[[[element elementsForName:@"assignmentId"] objectAtIndex:0] stringValue] intValue];
+    reportInfo.courseCode=[[[element elementsForName:@"courseCode"] objectAtIndex:0] stringValue];
+    reportInfo.desc=[[[element elementsForName:@"description"] objectAtIndex:0] stringValue];
+    reportInfo.fileName=[[[element elementsForName:@"attachFileName"] objectAtIndex:0] stringValue];
+    reportInfo.submitTime=[[[element elementsForName:@"submitTime"] objectAtIndex:0] stringValue];
+    
+    return reportInfo;
+}
 
 -(AssignmentType *)parseAssignmentTypeXML:(GDataXMLElement *)element{
     AssignmentType *assignmentType=[[AssignmentType alloc] init];
@@ -432,6 +527,8 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
     assignmentType.courseCode=[[[element elementsForName:@"courseCode"] objectAtIndex:0] stringValue];
     assignmentType.desc=[[[element elementsForName:@"desc"] objectAtIndex:0] stringValue];
     assignmentType.dueDate=[[[element elementsForName:@"dueDate"] objectAtIndex:0] stringValue];
+    assignmentType.dueDate=[TimeUtils formatData:assignmentType.dueDate from:@"yyyy-MM-dd+HH:mm" to:@"yyyy-MM-dd HH:mm"];
+    
     assignmentType.createdTime=[[[element elementsForName:@"createdTime"] objectAtIndex:0] stringValue];
     
     return assignmentType;
@@ -452,7 +549,17 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
     return reservationType;
 
 }
+-(CourseType *)parseCourseTypeXML:(GDataXMLElement *)element{
+    CourseType *courseType=[[CourseType alloc] init];
+    courseType.courseCode=[[[element elementsForName:@"courseCode"] objectAtIndex:0] stringValue];
+    courseType.name=[[[element elementsForName:@"name"] objectAtIndex:0] stringValue];
+    courseType.desc=[[[element elementsForName:@"desc"] objectAtIndex:0] stringValue];
+    courseType.year=[[[[element elementsForName:@"year"] objectAtIndex:0] stringValue] intValue];
+    courseType.semester=[[[[element elementsForName:@"semester"] objectAtIndex:0] stringValue] intValue];
+    
+    return courseType;
 
+}
 -(LabInfoType *)parseLabInfoTypeXML:(GDataXMLElement *)element{
     LabInfoType *labInfoType=[[LabInfoType alloc] init];
     labInfoType.labId=[[[[element elementsForName:@"labId"] objectAtIndex:0] stringValue] intValue];
@@ -488,8 +595,19 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
 }
 
 #pragma private
-
+-(void)readErrorCodePlistFile{
+    NSDictionary *errCodeDictionary=[[NSDictionary alloc] initWithContentsOfFile:[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"errorCodePlist.plist"]];
+    
+    self.errorCodeDictionary=errCodeDictionary;
+}
 -(void)notificationErrorCode:(NSString *)errorCode{
+    if([NSThread isMainThread]){
+        _block(errorCode,[self.errorCodeDictionary objectForKey:errorCode]);
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _block(errorCode,[self.errorCodeDictionary objectForKey:errorCode]);
+        });
+    }
     return ;
 }
 -(GDataXMLElement *)getRootElementByData:(NSData *)data{
@@ -498,6 +616,30 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
     return [rootElement copy];
 }
 
+-(NSData *)requestURLSyncPOST:(NSString *)service postBody:(NSData *)postBody{
+    NSURL* url=[NSURL URLWithString:service];
+    NSMutableURLRequest* request=[NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:12];
+    [request setHTTPMethod:@"POST"];
+    
+    [request setHTTPBody:postBody];
+    
+    NSURLResponse* response=nil;
+    NSError* error=nil;
+    NSData * data=[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    if(data!=nil){
+        return data;
+    }else{
+        NSString *errorDescription=nil;
+        errorDescription=error.localizedDescription;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self notificationErrorCode:errorDescription];
+            
+        });
+    }
+    return nil;
+}
 -(NSData *)requestURLSync:(NSString *)service{
     NSURL* url=[NSURL URLWithString:service];
     NSMutableURLRequest* request=[NSMutableURLRequest requestWithURL:url];
@@ -512,8 +654,8 @@ static  NSString* KEY_SECTOKEN=@"sectoken_KEY";
         NSString *errorDescription=nil;
         errorDescription=error.localizedDescription;
         dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [self notificationErrorCode:errorDescription];
+             NSLog(@"errorDescription %@",errorDescription);
+            [self notificationErrorCode:@"9999"];
             
         });
     }

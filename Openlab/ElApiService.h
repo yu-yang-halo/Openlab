@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "MyObjectDataBean.h"
+
+typedef void (^ErrorCodeHandlerBlock)(NSString *errorCode ,NSString *errorMsg);
+
+extern const NSString* KEY_USERID;
+
 @class ElApiService;
 static ElApiService* shareService=nil;
 @interface ElApiService : NSObject{
@@ -18,6 +23,14 @@ static ElApiService* shareService=nil;
 
 +(ElApiService *) shareElApiService;
 
+
+-(NSData *)requestURLSync:(NSString *)service;
+
+
+-(NSString *)getWebImageURL:(NSString *)imageName;
+
+-(void)setIWSErrorCodeListenerBlock:(ErrorCodeHandlerBlock)block;
+
 -(BOOL)login:(NSString *)name password:(NSString *)pass;
 -(BOOL)logout;
 -(BOOL)createUser:(UserType *)userType;
@@ -27,11 +40,12 @@ static ElApiService* shareService=nil;
  ** openlab api
  **
  */
+-(NSArray *)getLabCourseList;
 -(NSArray *)getLabListByIncDesk:(BOOL)incDesk;
 -(BOOL)AddOrUpdAssignment:(int)asId courseCode:(NSString *)arg0 desc:(NSString *)arg1 dueDate:(NSString *)arg2;
 -(BOOL)submitReport:(NSString *)courseCode file:(NSString *)arg0 desc:(NSString *)arg1 assignmentId:(int)arg2;
 -(NSArray *)getReservationList:(NSString *)name;
--(NSArray *)getAssignmentList:(NSString *)courseCode;
+-(Turple *)getAssignmentList:(NSString *)courseCode;
 -(BOOL)addOrUpdReservation:(NSString *)userName startTime:(NSString *)arg0 endTime:(NSString *)arg1 deskNum:(int)arg2 labId:(int)arg3 status:(int)arg4 resvId:(int)arg5;
 
 

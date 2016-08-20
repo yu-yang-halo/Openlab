@@ -8,6 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+
+typedef NS_ENUM(NSInteger,Semester){
+    Semester_NONE=0,
+    Semester_LAST=1,
+    Semester_NEXT=2
+};
+
+
 @interface MyObjectDataBean : NSObject
 
 @end
@@ -65,4 +73,33 @@
 @property(nonatomic,strong) NSString *createdTime;
 @end
 
+@interface ReportInfo : NSObject
+@property(nonatomic,assign) int reportId;
+@property(nonatomic,assign) int userId;
+@property(nonatomic,assign) int assignmentId;
+@property(nonatomic,strong) NSString *courseCode;
+@property(nonatomic,strong) NSString *desc;
+@property(nonatomic,strong) NSString *fileName;
+@property(nonatomic,strong) NSString *submitTime;
+@end
 
+
+
+@interface CourseType : NSObject
+@property(nonatomic,strong) NSString *courseCode;
+@property(nonatomic,strong) NSString *name;
+@property(nonatomic,strong) NSString *desc;
+@property(nonatomic,assign) int year;
+@property(nonatomic,assign) Semester semester;
+@property(nonatomic,strong) NSArray *assignmentTypes;
+@property(nonatomic,assign) BOOL isExpandYN;
+
+@property(nonatomic,strong) NSArray *reportInfos;
+@end
+
+@interface Turple : NSObject
+
+@property(nonatomic,strong) NSArray<AssignmentType *> *assignmentTypes;
+@property(nonatomic,strong) NSArray<ReportInfo *> *reportInfos;
+
+@end

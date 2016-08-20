@@ -9,7 +9,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>CustomIOSAlertView.xcscheme</key>
+		<key>ActionSheetPicker-3.0.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>HMSegmentedControl.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>LGAlertView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -19,12 +29,32 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>MJRefresh.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Masonry.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>RBBAnimation.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>SDWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>TZImagePickerController.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -37,12 +67,42 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>15861722E21E7A0562F905678C6AE6E5</key>
+		<key>13B508919B595BB511488154720C9AC4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6A3E7C3A4E39D33477AFD6798025CE5C</key>
+		<key>22EF013F2C2E72C2D8361E577DEB424A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2AB49797D14D57FA43A345254AFB9F18</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4C36B1F5D992ACDFD781AFC537E2D4B2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>53480ED0BE09FF49E34B1702D485CAAB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>5B768C9E1F7EA8D6553451A8BB8743C4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8CECCF9CBD8FCF0DF8F169FB4FA2D5DD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8F74D9EA91F4C43190670066BAC37D44</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -52,12 +112,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BA81B9F23769D8D353913FCAFBEA71E5</key>
+		<key>A1B228A7627736EBB0399DCDCCD6BF34</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DDC616B9850A1520AB27C1EC91C7403D</key>
+		<key>A5A9DD1CECE14D398C686B4C6800E281</key>
 		<dict>
 			<key>primary</key>
 			<true/>

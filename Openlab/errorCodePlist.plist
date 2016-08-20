@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>0</key>
+	<string>成功</string>
+	<key>1</key>
+	<string>服务器错误，请稍后再试</string>
+	<key>2</key>
+	<string>登录失败，请重试</string>
+	<key>3</key>
+	<string>不能连接到服务器，请检查手机网络状态</string>
+	<key>1001</key>
+	<string>用户名或密码输入错误</string>
+	<key>1002</key>
+	<string>用户名或密码输入错误</string>
+	<key>1003</key>
+	<string>账户被锁定</string>
+	<key>1008</key>
+	<string>用户名已经被使用</string>
+	<key>1039</key>
+	<string>超时，请重新登录</string>
+	<key>1100</key>
+	<string>内部错误</string>
+	<key>1009</key>
+	<string>账户不存在</string>
+	<key>1005</key>
+	<string>权限拒绝</string>
+	<key>1006</key>
+	<string>token失效，请重新登录</string>
+	<key>1007</key>
+	<string>token失效，请重新登录</string>
+	<key>2000</key>
+	<string>实验室信息无法添加到该系统</string>
+	<key>2001</key>
+	<string>预约无法找到</string>
+	<key>2003</key>
+	<string>作业无法找到</string>
+	<key>2004</key>
+	<string>预约已存在</string>
+	<key>2005</key>
+	<string>预约无法取消</string>
+	<key>2006</key>
+	<string>预约已满，无法预约</string>
+	<key>9999</key>
+	<string>网络超时,无法连接</string>
+	<key>10000</key>
+	<string>未知的错误</string>
+</dict>
+</plist>

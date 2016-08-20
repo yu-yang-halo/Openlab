@@ -1,0 +1,56 @@
+PODS:
+  - ActionSheetPicker-3.0 (2.0.5)
+  - AFNetworking (3.1.0):
+    - AFNetworking/NSURLSession (= 3.1.0)
+    - AFNetworking/Reachability (= 3.1.0)
+    - AFNetworking/Security (= 3.1.0)
+    - AFNetworking/Serialization (= 3.1.0)
+    - AFNetworking/UIKit (= 3.1.0)
+  - AFNetworking/NSURLSession (3.1.0):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.1.0)
+  - AFNetworking/Security (3.1.0)
+  - AFNetworking/Serialization (3.1.0)
+  - AFNetworking/UIKit (3.1.0):
+    - AFNetworking/NSURLSession
+  - HMSegmentedControl (1.5.2)
+  - LGAlertView (2.0.13)
+  - Masonry (1.0.1)
+  - MBProgressHUD (0.9.2)
+  - MJRefresh (3.1.0)
+  - RBBAnimation (0.4.0)
+  - SDWebImage (3.7.5):
+    - SDWebImage/Core (= 3.7.5)
+  - SDWebImage/Core (3.7.5)
+  - Toast (3.0)
+  - TZImagePickerController (1.5.0)
+
+DEPENDENCIES:
+  - ActionSheetPicker-3.0
+  - AFNetworking (~> 3.0)
+  - HMSegmentedControl
+  - LGAlertView (~> 2.0.0)
+  - Masonry
+  - MBProgressHUD (~> 0.9.2)
+  - MJRefresh
+  - RBBAnimation (= 0.4.0)
+  - SDWebImage
+  - Toast (~> 3.0)
+  - TZImagePickerController
+
+SPEC CHECKSUMS:
+  ActionSheetPicker-3.0: 8312778b6815578e6a86d630fbcf31dc94c534e7
+  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  HMSegmentedControl: 83b9686022d2176fb6457d2bdb61e5d6393fed7d
+  LGAlertView: 9a5dcbf4f81b02b718083539d7f222280adc9547
+  Masonry: a1a931a0d08870ed8ae415a2ea5ea68ebcac77df
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  MJRefresh: 743e6404967d1c2c688472ea3ecfde247d872db4
+  RBBAnimation: 4b2d66f6d993febce63cd564da934985313b9c59
+  SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
+  Toast: 32c59229abfcf41850162b83bb9259dc84372473
+  TZImagePickerController: d09eef6042852a9dd19224ae4e874f7430852a51
+
+COCOAPODS: 0.39.0

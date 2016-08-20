@@ -16,6 +16,9 @@
 @end
 
 @implementation LabInfoType
+-(NSString *)description{
+    return _name;
+}
 @end
 
 @implementation DeskInfo
@@ -23,4 +26,10 @@
 @implementation ReservationType
 @end
 @implementation AssignmentType
+@end
+@implementation CourseType
+@end
+@implementation ReportInfo
+@end
+@implementation Turple
 @end

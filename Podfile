@@ -1,7 +1,13 @@
 platform :ios, '7.0'
 pod 'Toast', '~> 3.0'
 pod "SDWebImage"
-pod 'CustomIOSAlertView', '~> 0.9.3'
+pod 'LGAlertView', '~> 2.0.0'
 pod 'AFNetworking', '~> 3.0'
 pod 'MBProgressHUD', '~> 0.9.2'
-
+pod 'RBBAnimation', '0.4.0'
+pod 'ActionSheetPicker-3.0'
+pod 'LGAlertView', '~> 2.0.0'
+pod 'HMSegmentedControl'
+pod 'MJRefresh'
+pod 'TZImagePickerController'
+pod 'Masonry'
