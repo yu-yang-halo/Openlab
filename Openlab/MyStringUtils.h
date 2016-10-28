@@ -10,6 +10,7 @@
 
 @interface MyStringUtils : NSObject
 //正则表达式判断
++(BOOL)isVaildPass:(NSString *)pass;
 +(BOOL)isMobileNumber:(NSString *)mobileNum;
 +(BOOL)isEmpty:(NSString *)str;
 

@@ -57,12 +57,63 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     return encodedString;
 }
 
+/**
+ **短信验证码
+ **/
+
+-(BOOL)sendShortMsgCode:(NSString *)key type:(int)type{
+    NSString *service=[NSString stringWithFormat:@"%@sendShortMsgCode?senderId=0&secToken=0&key=%@&type=%d",self.authapiUrl,key,type];
+    
+    
+    NSLog(@"sendShortMsgCode service:%@",service);
+    NSData *data=[self requestURLSync:service];
+    if(data!=nil){
+        GDataXMLElement *rootElement=[self getRootElementByData:data];
+        
+        NSString* errorCodeVal=[[[rootElement elementsForName:@"errorCode"] objectAtIndex:0] stringValue];
+        
+        
+        if([errorCodeVal isEqualToString:@"0"]){
+            return YES;
+        }else{
+            [self notificationErrorCode:errorCodeVal];
+        }
+        
+    }
+    return NO;
+
+}
+
+
+-(BOOL)verificationCode:(NSString *)key code:(NSString *)code{
+    NSString *service=[NSString stringWithFormat:@"%@verificationCode?senderId=0&secToken=0&key=%@&code=%@",self.authapiUrl,key,code];
+    NSLog(@"verificationCode service:%@",service);
+    NSData *data=[self requestURLSync:service];
+    if(data!=nil){
+        GDataXMLElement *rootElement=[self getRootElementByData:data];
+        
+        NSString* errorCodeVal=[[[rootElement elementsForName:@"errorCode"] objectAtIndex:0] stringValue];
+        
+        
+        if([errorCodeVal isEqualToString:@"0"]){
+            return YES;
+        }else{
+            [self notificationErrorCode:errorCodeVal];
+        }
+        
+    }
+    return NO;
+}
+
+
 /***********************************
  * webService API begin...
  
     authapi
  ***********************************
  */
+
+
 
 -(BOOL)login:(NSString *)name password:(NSString *)pass{
     return [self syslogin:name password:[WsqMD5Util getmd5WithString:pass]];
@@ -122,10 +173,54 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     
     return NO;
 }
--(BOOL)createUser:(UserType *)userType{
-    [self syslogin:@"root" password:@"root"];
+-(BOOL)updateUser:(NSString *)loginName phone:(NSString *)phone pass:(NSString *)pwd vcode:(NSString *)vcode{
+    
     NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
     NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
+    
+    if(userID==nil||secToken==nil){
+       userID=@"0";
+       secToken=@"0";
+    }
+    NSMutableString *appendStr=[[NSMutableString alloc] init];
+    
+    if(loginName!=nil){
+        [appendStr appendFormat:@"&name=%@",loginName];
+    }
+    if(vcode!=nil){
+        [appendStr appendFormat:@"&vCode=%@",vcode];
+    }
+    if(phone!=nil){
+        [appendStr appendFormat:@"&phone=%@",phone];
+    }
+    
+    NSString *service=[NSString stringWithFormat:@"%@updateUser?senderId=%@&secToken=%@&userId=%@&password=%@%@",self.authapiUrl,userID,secToken,userID,[WsqMD5Util getmd5WithString:pwd],appendStr];
+    
+
+    
+    NSLog(@"updateUser service:%@",service);
+    NSData *data=[self requestURLSync:service];
+    if(data!=nil){
+        GDataXMLElement *rootElement=[self getRootElementByData:data];
+        
+        NSString* errorCodeVal=[[[rootElement elementsForName:@"errorCode"] objectAtIndex:0] stringValue];
+        
+        
+        if([errorCodeVal isEqualToString:@"0"]){
+            return YES;
+        }else{
+            [self notificationErrorCode:errorCodeVal];
+        }
+        
+    }
+    return NO;
+    
+    
+    
+}
+-(BOOL)createUser:(UserType *)userType{
+
+
     
     NSMutableString *appendStr=[[NSMutableString alloc] init];
     
@@ -152,8 +247,7 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     }
     
     
-    
-    NSString *service=[NSString stringWithFormat:@"%@createUser?senderId=%@&secToken=%@&name=%@&password=%@%@",self.authapiUrl,userID,secToken,userType.name,[WsqMD5Util getmd5WithString:userType.password],appendStr];
+    NSString *service=[NSString stringWithFormat:@"%@createUser?senderId=0&secToken=0&name=%@&password=%@%@",self.authapiUrl,userType.name,[WsqMD5Util getmd5WithString:userType.password],appendStr];
     
     
     NSLog(@"createUser service:%@",service);
@@ -227,10 +321,59 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
  ***********************************
  */
 
--(NSArray *)getLabCourseList{
+-(NSArray *)getSemesterList{
+    NSString *service=[NSString stringWithFormat:@"%@getSemesterList?senderId=1&secToken=1",self.openlabUrl];
+    
+    NSLog(@"getSemesterList service:%@",service);
+    NSMutableArray *years=[NSMutableArray new];
+    NSData *data=[self requestURLSync:service];
+    if(data!=nil){
+        GDataXMLElement *rootElement=[self getRootElementByData:data];
+        
+        NSString* errorCodeVal=[[[rootElement elementsForName:@"errorCode"] objectAtIndex:0] stringValue];
+        
+        if([errorCodeVal isEqualToString:@"0"]){
+            NSArray *semesterNodes=[rootElement elementsForName:@"semester"];
+           
+            for (GDataXMLElement *element in semesterNodes) {
+                
+               NSString *year=[[[element elementsForName:@"year"] objectAtIndex:0] stringValue];
+               
+               if(year==nil){
+                    continue;
+               }
+                
+                
+               [years addObject:year];
+                
+            }
+           
+        }
+        
+    }
+    
+    if(years!=nil&&[years count]>0){
+        NSMutableArray *yearsonly=[NSMutableArray new];
+        for (NSString *_y in years) {
+            if([yearsonly containsObject:_y]){
+                continue;
+            }
+            
+            [yearsonly addObject:_y];
+            
+        }
+        
+        return yearsonly;
+    }else{
+        return years;
+    }
+}
+
+
+-(NSArray *)getLabCourseList:(NSString *)currerYear semester:(int)seme{
     NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
     NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
-    NSString *service=[NSString stringWithFormat:@"%@getLabCourseList?senderId=%@&secToken=%@&year=1&semester=1",self.openlabUrl,userID,secToken];
+    NSString *service=[NSString stringWithFormat:@"%@getLabCourseList?senderId=%@&secToken=%@&userId=%@&year=%@&semester=%d&userType=0",self.openlabUrl,userID,secToken,userID,currerYear,seme];
     
     
     NSLog(@"getLabCourseList service:%@",service);
@@ -374,6 +517,52 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     
 }
 
+-(ScoreType *)getStudentScoreList:(NSString *)courseCode{
+    NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
+    NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
+    NSString *service=[NSString stringWithFormat:@"%@getStudentScoreList?senderId=%@&secToken=%@&userId=%@&courseCode=%@",self.openlabUrl,userID,secToken,userID,courseCode];
+    
+    NSLog(@"getStudentScoreList service:%@",service);
+    NSData *data=[self requestURLSync:service];
+    if(data!=nil){
+        GDataXMLElement *rootElement=[self getRootElementByData:data];
+       
+        
+        NSString* errorCodeVal=[[[rootElement elementsForName:@"errorCode"] objectAtIndex:0] stringValue];
+        if([errorCodeVal isEqualToString:@"0"]){
+            NSArray *scoreListNodes=[rootElement elementsForName:@"scoreList"];
+            
+            NSMutableArray *scoreList=[[NSMutableArray alloc] init];
+            
+            for (GDataXMLElement *element in scoreListNodes) {
+                
+                ScoreType *scoreType=(ScoreType *) [self parseScoreTypeXML:element];
+                
+                if(scoreType.studentId!=[userID intValue]){
+                    continue;
+                }
+                
+                [scoreList addObject:scoreType];
+                
+            }
+            
+            if([scoreList count]==1){
+                return scoreList[0];
+            }
+            
+            
+           
+            
+            
+        }else{
+            [self notificationErrorCode:errorCodeVal];
+        }
+        
+    }
+    return nil; 
+
+}
+
 -(NSArray *)getReservationList:(NSString *)name{
     NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
     NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
@@ -398,7 +587,13 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
                 [reservationList addObject:reservationType];
                 
             }
-            return reservationList;
+            //sort
+            NSArray *sortArr=[reservationList sortedArrayUsingComparator:^NSComparisonResult(ReservationType* obj1, ReservationType* obj2) {
+                return [obj2.startTime compare:obj1.startTime];
+            }];
+            
+            
+            return sortArr;
             
             
         }else{
@@ -409,6 +604,8 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     return nil;
     
 }
+
+
 
 -(Turple *)getAssignmentList:(NSString *)courseCode{
     NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
@@ -448,6 +645,10 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
                 [assignmentList addObject:assignmentType];
                 
             }
+            //sort
+            NSArray *sortArr=[assignmentList sortedArrayUsingComparator:^NSComparisonResult(AssignmentType* obj1, AssignmentType* obj2) {
+                return [obj2.dueDate compare:obj1.dueDate];
+            }];
             
             for (GDataXMLElement *element in reportListNodes) {
                 
@@ -457,7 +658,7 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
                 
             }
             
-            turple.assignmentTypes=assignmentList;
+            turple.assignmentTypes=sortArr;
             turple.reportInfos=reportList;
             
             return turple;
@@ -527,13 +728,27 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     assignmentType.courseCode=[[[element elementsForName:@"courseCode"] objectAtIndex:0] stringValue];
     assignmentType.desc=[[[element elementsForName:@"desc"] objectAtIndex:0] stringValue];
     assignmentType.dueDate=[[[element elementsForName:@"dueDate"] objectAtIndex:0] stringValue];
-    assignmentType.dueDate=[TimeUtils formatData:assignmentType.dueDate from:@"yyyy-MM-dd+HH:mm" to:@"yyyy-MM-dd HH:mm"];
+    assignmentType.dueDate=[TimeUtils normalShowTime:assignmentType.dueDate];
     
     assignmentType.createdTime=[[[element elementsForName:@"createdTime"] objectAtIndex:0] stringValue];
     
     return assignmentType;
 }
 
+
+-(ScoreType *)parseScoreTypeXML:(GDataXMLElement *)element{
+    ScoreType *scoreType=[[ScoreType alloc] init];
+    scoreType.studentId=[[[[element elementsForName:@"studentId"] objectAtIndex:0] stringValue] intValue];
+    scoreType.courseCode=[[[element elementsForName:@"courseCode"] objectAtIndex:0] stringValue];
+    scoreType.score=[[[[element elementsForName:@"score"] objectAtIndex:0] stringValue] floatValue];
+    scoreType.comment=[[[element elementsForName:@"comment"] objectAtIndex:0] stringValue];
+    
+    scoreType.status=[[[[element elementsForName:@"status"] objectAtIndex:0] stringValue] intValue];
+   
+    
+    return scoreType;
+    
+}
 -(ReservationType *)parseReservationTypeXML:(GDataXMLElement *)element{
     ReservationType *reservationType=[[ReservationType alloc] init];
     reservationType.labId=[[[[element elementsForName:@"labId"] objectAtIndex:0] stringValue] intValue];

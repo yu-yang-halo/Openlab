@@ -9,7 +9,9 @@
 #import "MyExpandTableView.h"
 #import "AssignmentTableViewCell.h"
 #import "MyAssignmentUploadViewController.h"
-@interface MyExpandTableView()
+@interface MyExpandTableView(){
+    int clickParentIndex;
+}
 @property(nonatomic,strong) ChildDataLoadBlock block;
 @end
 @implementation MyExpandTableView
@@ -44,6 +46,7 @@
 }
 
 -(void)beginLoadChildData:(ChildDataLoadBlock)block{
+    clickParentIndex=-1;
     self.block=block;
 }
 
@@ -57,6 +60,8 @@
      *  state expand 展开状态显示正常数据 
      *        关闭状态显示0
      */
+    
+    
     
     if(![[_courseDatas objectAtIndex:section] isExpandYN]){
         return 0;
@@ -86,14 +91,14 @@
     AssignmentType *assignmentType=[assignmentTypes objectAtIndex:indexPath.row];
     
     cell.nameLabel.text=assignmentType.desc;
-    cell.dueLabel.text=assignmentType.dueDate;
+    cell.dueLabel.text=[NSString stringWithFormat:@"过期时间:%@",assignmentType.dueDate];
     
     if([self isHasReport:indexPath.section assignmentId:assignmentType.asId]){
         cell.statusLabel.text=@"已上传报告";
     }else{
         cell.statusLabel.text=@"未上传报告";
     }
-   
+    
     
     [cell setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:0.7]];
     
@@ -101,6 +106,7 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
      NSLog(@"%@",indexPath);
+    clickParentIndex=indexPath.section;
     MyAssignmentUploadViewController *vc=[[MyAssignmentUploadViewController alloc] init];
     NSArray<ReportInfo *> *reportInfos=[[_courseDatas objectAtIndex:indexPath.section] reportInfos];
     
@@ -109,6 +115,7 @@
     vc.reportList=reportInfos;
     vc.assignmentId=assignmentType.asId;
     vc.courseCode=assignmentType.courseCode;
+    vc.title=assignmentType.desc;
     
     
     [self.viewControllerDelegate.navigationController pushViewController:vc animated:YES];
@@ -131,9 +138,7 @@
     return reportYN;
     
 }
-//- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-//    return [NSString stringWithFormat:@"section %d",section];
-//}
+
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     /*
@@ -149,47 +154,58 @@
     [backgroundView setBackgroundColor:[UIColor colorWithWhite:1 alpha:1]];
     [backgroundView addTarget:self action:@selector(groupExpand:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIImageView *arrowImageView=[[UIImageView alloc] initWithFrame:CGRectMake(10,(50-10)/2,15,10)];
+    UIImageView *arrowImageView=[[UIImageView alloc] initWithFrame:CGRectMake(10,(50-6)/2,13,6)];
     if([[_courseDatas objectAtIndex:section] isExpandYN]){
        [arrowImageView setImage:[UIImage imageNamed:@"arrow_up"]];
     }else{
        [arrowImageView setImage:[UIImage imageNamed:@"arrow_down"]];
     }
     
-   
-    
-    
-    UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(20+15,0,300,50)];
-    
+    UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(70,0,250,50)];
+    [label setTextAlignment:NSTextAlignmentLeft];
+    [label setFont:[UIFont systemFontOfSize:17]];
     
     label.text=courseType.name;
+   
     [backgroundView addSubview:arrowImageView];
     [backgroundView addSubview:label];
     return backgroundView;
 }
--(void)groupExpand:(UIButton *)sender{
-    CourseType *courseType=[_courseDatas objectAtIndex:sender.tag];
+-(void)reloadChildData{
+    if(clickParentIndex<0){
+        return;
+    }
+    [[_courseDatas objectAtIndex:clickParentIndex] setIsExpandYN:NO];
+    [self reloadChildData:clickParentIndex];
+}
+-(void)reloadChildData:(int)selectCourseIndex{
+  
+    CourseType *courseType=[_courseDatas objectAtIndex:selectCourseIndex];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-          _block(courseType.courseCode);
-          dispatch_async(dispatch_get_main_queue(), ^{
-              if([[_courseDatas objectAtIndex:sender.tag] isExpandYN]){
-                  [[_courseDatas objectAtIndex:sender.tag] setIsExpandYN:NO];
-              }else{
-                  [[_courseDatas objectAtIndex:sender.tag] setIsExpandYN:YES];
-              }
-              
-              [self reloadSections:[NSIndexSet indexSetWithIndex:sender.tag] withRowAnimation:UITableViewRowAnimationAutomatic];
-          });
+        _block(courseType.courseCode);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if([[_courseDatas objectAtIndex:selectCourseIndex] isExpandYN]){
+                [[_courseDatas objectAtIndex:selectCourseIndex] setIsExpandYN:NO];
+            }else{
+                [[_courseDatas objectAtIndex:selectCourseIndex] setIsExpandYN:YES];
+            }
+            
+            [self reloadSections:[NSIndexSet indexSetWithIndex:selectCourseIndex] withRowAnimation:UITableViewRowAnimationFade];
+            
+        });
     });
-   
+}
+
+-(void)groupExpand:(UIButton *)sender{
+    [self reloadChildData:sender.tag];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 50;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 0.00001;
+    return 0;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 130;

@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '658241CE2614DE3383F37F6F'
+               BlueprintIdentifier = '255F4960D82A60696243066A'
                BlueprintName = 'LGAlertView'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libLGAlertView.a'>

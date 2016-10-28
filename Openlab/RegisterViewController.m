@@ -15,16 +15,21 @@
     UITextField *firstResponderTF;
     CGFloat kbHeight;
     double  duration;
+    NSInteger timeVal;
 }
+@property(nonatomic,strong) NSTimer *timer;
+
+
 @property (weak, nonatomic) IBOutlet UITextField *numberTF;
 
 @property (weak, nonatomic) IBOutlet UITextField *passwordTF;
 
 @property (weak, nonatomic) IBOutlet UITextField *repasswordTF;
-@property (weak, nonatomic) IBOutlet UITextField *realNameTF;
+@property (weak, nonatomic) IBOutlet UITextField *vcodeTF;
 @property (weak, nonatomic) IBOutlet UITextField *phoneTF;
 
 @property (weak, nonatomic) IBOutlet UIButton *registerBtn;
+@property (weak, nonatomic) IBOutlet UIButton *getCodeBtn;
 
 
 @end
@@ -42,7 +47,7 @@
     self.numberTF.delegate=self;
     self.passwordTF.delegate=self;
     self.repasswordTF.delegate=self;
-    self.realNameTF.delegate=self;
+    self.vcodeTF.delegate=self;
     self.phoneTF.delegate=self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -53,27 +58,57 @@
     [self.registerBtn addTarget:self action:@selector(beginRegister:) forControlEvents:UIControlEventTouchUpInside];
     
     
+    [self.getCodeBtn addTarget:self action:@selector(getVCode:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+}
+
+-(void)getVCode:(id)sender{
+    NSString *phone =self.phoneTF.text;
+    if(![MyStringUtils isMobileNumber:phone]){
+        [self.view makeToast:@"请输入正确的手机号码"];
+    }else{
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[ElApiService shareElApiService] sendShortMsgCode:phone type:0];
+        });
+        
+        [self.getCodeBtn setUserInteractionEnabled:NO];
+        timeVal=40;
+        self.timer=[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(secondsUpdate) userInfo:nil repeats:YES];
+    }
+}
+-(void)secondsUpdate{
+    [self.getCodeBtn setTitle:[NSString stringWithFormat:@"%ds",timeVal] forState:UIControlStateNormal];
+    
+    timeVal--;
+    if(timeVal<=0){
+        [_getCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [_getCodeBtn setUserInteractionEnabled:YES];
+        [_timer invalidate];
+    }
+    
 }
 
 -(void)beginRegister:(id)sender{
     NSString *number   =self.numberTF.text;
     NSString *password =self.passwordTF.text;
     NSString *repassword =self.repasswordTF.text;
-    NSString *realName =self.realNameTF.text;
+    NSString *vcode =self.vcodeTF.text;
     NSString *phone =self.phoneTF.text;
     
     if([MyStringUtils isEmpty:number]){
-        [self.view makeToast:@"学生卡号不能为空"];
-    }else if ([MyStringUtils isEmpty:password]){
-        [self.view makeToast:@"密码不能为空"];
-    }else if([MyStringUtils isEmpty:realName]){
-        [self.view makeToast:@"姓名不能为空"];
+        [self.view.window makeToast:@"学生卡号不能为空"];
+    }else if (![MyStringUtils isVaildPass:password]){
+        [self.view.window makeToast:@"密码至少为6位"];
+    }else if([MyStringUtils isEmpty:vcode]){
+        [self.view.window makeToast:@"验证码不能为空"];
     }else if([MyStringUtils isEmpty:phone]){
-        [self.view makeToast:@"手机号码不能为空"];
+        [self.view.window makeToast:@"手机号码不能为空"];
     }else if(![password isEqualToString:repassword]){
-        [self.view makeToast:@"两次密码不一致"];
+        [self.view.window makeToast:@"两次密码不一致"];
     }else if(![MyStringUtils isMobileNumber:phone]){
-        [self.view makeToast:@"请输入正确的手机号码"];
+        [self.view.window makeToast:@"请输入正确的手机号码"];
     }else{
         MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.labelText=@"注册中...";
@@ -82,17 +117,27 @@
             UserType *user=[[UserType alloc] init];
             user.name=number;
             user.password=password;
-            user.realName=[MyStringUtils encodeToPercentEscapeString:realName];
             user.phone=phone;
             user.userRole=@"student";
-            BOOL registerSuccessYN=[[ElApiService shareElApiService] createUser:user];
+            user.vcode=vcode;
             
+            BOOL vcodeIsRight=[[ElApiService shareElApiService] verificationCode:phone code:vcode];
+            BOOL registerSuccessYN=NO;
+            if(vcodeIsRight){
+                registerSuccessYN=[[ElApiService shareElApiService] createUser:user];
+            }
+          
             dispatch_async(dispatch_get_main_queue(), ^{
                 [hud hide:YES];
-                if(registerSuccessYN){
-                    [self.view.window makeToast:@"注册成功"];
-                    [self.navigationController popViewControllerAnimated:YES];
+                if(!vcodeIsRight){
+                    [self.view.window makeToast:@"无效的验证码"];
+                }else{
+                    if(registerSuccessYN){
+                        [self.view.window makeToast:@"注册成功"];
+                        [self.navigationController popViewControllerAnimated:YES];
+                    }
                 }
+               
             });
         });
     }

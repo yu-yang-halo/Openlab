@@ -31,5 +31,7 @@
 @end
 @implementation ReportInfo
 @end
+@implementation ScoreType
+@end
 @implementation Turple
 @end

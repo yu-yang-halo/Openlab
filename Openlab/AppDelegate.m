@@ -88,10 +88,10 @@ static BOOL isProduction = YES;
             advertisingIdentifier:nil];
     
     
-    
         
     return YES;
 }
+
 
 
 -(void)getAllClass{
@@ -121,6 +121,7 @@ static BOOL isProduction = YES;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [self resetJPUSHBadge];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -178,6 +179,9 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"收到通知0:%@", [self logDic:userInfo]);
     NSString *alertMessage=[[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
     [self popupMessage:alertMessage];
+    
+    
+    
 }
 
 - (void)application:(UIApplication *)application
@@ -198,8 +202,13 @@ fetchCompletionHandler:
     
     [alertView show];
     
+    [self resetJPUSHBadge];
+}
+-(void)resetJPUSHBadge{
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [JPUSHService resetBadge];
 }
+
 
 - (void)application:(UIApplication *)application
 didReceiveLocalNotification:(UILocalNotification *)notification {

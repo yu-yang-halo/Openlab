@@ -20,21 +20,33 @@
                             <constraint firstAttribute="width" constant="150" id="oOo-bu-s6b"/>
                         </constraints>
                     </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="daO-1P-Eb2">
+                        <rect key="frame" x="127" y="0.0" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="Olu-nM-Fxs"/>
+                            <constraint firstAttribute="width" constant="30" id="TuU-c0-9BK"/>
+                        </constraints>
+                        <state key="normal" image="del"/>
+                    </button>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <constraints>
+                <constraint firstItem="daO-1P-Eb2" firstAttribute="leading" secondItem="wZY-OC-jj9" secondAttribute="trailing" constant="-27" id="NY9-Sv-3l6"/>
+                <constraint firstItem="wZY-OC-jj9" firstAttribute="top" secondItem="daO-1P-Eb2" secondAttribute="bottom" constant="-20" id="ObP-AG-UPl"/>
                 <constraint firstItem="wZY-OC-jj9" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="Oxn-Qd-tH9"/>
                 <constraint firstItem="wZY-OC-jj9" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="Pig-hQ-Nw4"/>
             </constraints>
             <size key="customSize" width="173" height="162"/>
             <connections>
+                <outlet property="delIcon" destination="daO-1P-Eb2" id="OEE-Fu-UaW"/>
                 <outlet property="imageIcon" destination="wZY-OC-jj9" id="jbw-qP-C1U"/>
             </connections>
-            <point key="canvasLocation" x="202" y="205"/>
+            <point key="canvasLocation" x="-141.5" y="160"/>
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="del" width="38" height="38"/>
         <image name="icon_addpic" width="141" height="141"/>
     </resources>
 </document>

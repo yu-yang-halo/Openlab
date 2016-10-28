@@ -13,4 +13,5 @@ typedef void (^ChildDataLoadBlock)(NSString *courseCode);
 @property(nonatomic,strong) NSArray<CourseType *> *courseDatas;
 @property(nonatomic,weak) UIViewController *viewControllerDelegate;
 -(void)beginLoadChildData:(ChildDataLoadBlock)block;
+-(void)reloadChildData;
 @end

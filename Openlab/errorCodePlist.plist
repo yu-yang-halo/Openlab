@@ -42,6 +42,10 @@
 	<string>预约无法取消</string>
 	<key>2006</key>
 	<string>预约已满，无法预约</string>
+	<key>2012</key>
+	<string>验证不存在</string>
+	<key>2013</key>
+	<string>验证码不匹配</string>
 	<key>9999</key>
 	<string>网络超时,无法连接</string>
 	<key>10000</key>

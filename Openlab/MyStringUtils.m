@@ -9,6 +9,25 @@
 #import "MyStringUtils.h"
 
 @implementation MyStringUtils
++(BOOL)isVaildPass:(NSString *)pass
+{
+    /**
+     * 手机号码  简单判断11位数字
+     */
+    NSString * PASSREG = @"^[0-9a-zA-Z!#$%&^*_.?@]{6,20}$";
+    
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", PASSREG];
+    
+    
+    if ([regextestmobile evaluateWithObject:pass] == YES)
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
 +(BOOL)isMobileNumber:(NSString *)mobileNum
 {
     /**

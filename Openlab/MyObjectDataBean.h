@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger,Semester){
 @property(nonatomic,strong) NSString *lastLoginTime;
 @property(nonatomic,strong) NSString *cardId;
 @property(nonatomic,strong) NSString *userRole;
+@property(nonatomic,strong) NSString *vcode;
 
 @end
 
@@ -96,6 +97,16 @@ typedef NS_ENUM(NSInteger,Semester){
 
 @property(nonatomic,strong) NSArray *reportInfos;
 @end
+
+@interface ScoreType : NSObject
+@property(nonatomic,assign) int studentId;
+@property(nonatomic,strong) NSString *courseCode;
+@property(nonatomic,assign) float score;
+@property(nonatomic,strong) NSString *comment;
+@property(nonatomic,assign) short status;
+@property(nonatomic,strong) NSString *courseName;
+@end
+
 
 @interface Turple : NSObject
 

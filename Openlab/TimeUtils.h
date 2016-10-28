@@ -22,5 +22,6 @@
 +(NSDate *)addHoursAndMin:(NSUInteger)hours minutes:(NSUInteger)mins toDate:(NSDate*)date;
 
 +(NSString *)formatData:(NSString *)date from:(NSString *)formatFrom to:(NSString *)formatTo;
++(NSInteger)toYear;
 
 @end

@@ -236,6 +236,10 @@
 }
 
 - (void)cancel:(UIButton *)sender {
+   
+    if(_block!=nil){
+        _block(self,nil);
+    }
     [self hide];
 }
 
@@ -260,7 +264,7 @@
 - (void)confirm:(UIButton *)sender {
     [self playDelegateAfterSelectedRow];
     
-    [self cancel:sender];
+    [self hide];
 }
 
 - (UIColor *)monthRowTextColor:(NSInteger)row {

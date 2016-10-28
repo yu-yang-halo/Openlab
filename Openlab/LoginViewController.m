@@ -13,6 +13,7 @@
 #import "ElApiService.h"
 #import <UIView+Toast.h>
 #import "JPUSHService.h"
+#import "AppDelegate.h"
 @interface LoginViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *loginNameTF;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTF;
@@ -25,12 +26,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+        // Do any additional setup after loading the view, typically from a nib.
     
     self.loginNameTF.delegate=self;
     self.passwordTF.delegate=self;
     
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    
+    
+    
     
     [self.loginBtn.layer setCornerRadius:2.0];
     
@@ -55,9 +59,58 @@
     
     
     [self.loginBtn addTarget:self action:@selector(login:) forControlEvents:UIControlEventTouchUpInside];
+    [self launch];
+    
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    self.navigationItem.backBarButtonItem=[[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStyleDone target:self action:nil];
+    
+}
+
+-(void)launch{
+    AppDelegate *delegate=[[UIApplication sharedApplication] delegate];
+    
+    CGRect bounds=delegate.window.bounds;
+    
+    UIView *launchView=[[UIView alloc] initWithFrame:bounds];
+    [launchView setBackgroundColor:[UIColor blueColor]];
+    
+    UIImageView *imageV=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+    
+    imageV.image=[UIImage imageNamed:@"ic_launcher"];
+    
+    
+   
+    [launchView addSubview:imageV];
+    
+    
+    
+    [delegate.window addSubview:launchView];
+  
+     imageV.center=launchView.center;
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        imageV.bounds=CGRectMake(0, 0, 50, 50);
+        imageV.center=launchView.center;
+    } completion:^(BOOL finished) {
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            imageV.bounds=CGRectMake(0, 0, 1000, 1000);
+            imageV.center=launchView.center;
+            launchView.alpha=0.0;
+        } completion:^(BOOL finished) {
+            
+            [imageV removeFromSuperview];
+            [launchView removeFromSuperview];
+        }];
+       
+    }];
     
     
 }
+
+
 
 -(void)login:(id)sender{
     
@@ -96,16 +149,21 @@
 }
 
 -(void)toMainPage{
-    UIStoryboard *storyBoard=[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-    UITabBarController *tabVC=[storyBoard instantiateViewControllerWithIdentifier:@"tabVC"];
-    [tabVC.tabBar setTintColor:BUTTON_BG_COLOR_NORMAL];
-    [tabVC.tabBar setOpaque:0.6];
-    
     self.navigationItem.backBarButtonItem=nil;
     
-    [self.navigationController pushViewController:tabVC animated:YES];
+    [self performSegueWithIdentifier:@"tabVC" sender:nil];
 }
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(nullable id)sender NS_AVAILABLE_IOS(5_0){
+    
+    if([segue.destinationViewController isKindOfClass:[UITabBarController class]]){
+        
+        UITabBarController  *tabVC=segue.destinationViewController;
+        [tabVC.tabBar setTintColor:BUTTON_BG_COLOR_NORMAL];
+        [tabVC.tabBar setOpaque:0.6];
 
+    }
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -113,7 +171,8 @@
 }
 
 - (IBAction)registerUser:(id)sender {
-    
+    //regVC
+    [self performSegueWithIdentifier:@"regVC" sender:nil];
 }
 
 

@@ -10,5 +10,6 @@
 
 @interface UploadCollectionViewCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *imageIcon;
+@property (weak, nonatomic) IBOutlet UIButton *delIcon;
 
 @end

@@ -11,3 +11,6 @@ pod 'HMSegmentedControl'
 pod 'MJRefresh'
 pod 'TZImagePickerController'
 pod 'Masonry'
+pod 'UITextView+Placeholder','~> 1.2'
+pod 'pop',:git => 'https://github.com/facebook/pop.git'
+

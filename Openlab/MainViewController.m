@@ -227,16 +227,26 @@
     rect = CGRectMake(0.0,self.view.frame.size.height-216.0, rect.size.width, 216.0);
     
     KMDatePicker *datePicker=[[KMDatePicker alloc] initWithFrame:rect block:^(KMDatePicker *datePicker, KMDatePickerDateModel *datePickerDate) {
-        NSString *dateStr = [NSString stringWithFormat:@"%@-%@-%@",
-                             datePickerDate.year,
-                             datePickerDate.month,
-                             datePickerDate.day
-                             ];
-        [self writeData:dateStr toText:_timeText];
         
-        selectDate=dateStr;
+        if(datePickerDate==nil){
+            [self writeData:@"" toText:_timeText];
+            selectDate=@"";
+            startTime=@"";
+            endTime=@"";
+        }else{
+            NSString *dateStr = [NSString stringWithFormat:@"%@-%@-%@",
+                                 datePickerDate.year,
+                                 datePickerDate.month,
+                                 datePickerDate.day
+                                 ];
+            [self writeData:dateStr toText:_timeText];
+            
+            selectDate=dateStr;
+            
+            [self selectHHmm:0];
+        }
         
-        [self selectHHmm:0];
+       
         
     } datePickerStyle:KMDatePickerStyleYearMonthDay];
     
@@ -265,24 +275,33 @@
                              [self addZero:[datePickerDate.minute intValue]]
                              ];
        
-        
-        if(type==0){
-            startTime=[NSString stringWithFormat:@"%@ %@",selectDate,dateStr];
-            [self writeData:startTime toText:_timeText];
+        if(datePickerDate==nil){
+            [self writeData:@"" toText:_timeText];
+            selectDate=@"";
+            startTime=@"";
+            endTime=@"";
             
-            [self selectHHmm:1];
         }else{
-            if(selectedIndex==1){
-               NSDateComponents *components=[[NSCalendar currentCalendar] components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[NSDate new]];
+            
+            if(type==0){
+                startTime=[NSString stringWithFormat:@"%@ %@",selectDate,dateStr];
+                [self writeData:startTime toText:_timeText];
                 
-                endTime=[NSString stringWithFormat:@"%d-%@-%@ %@",components.year,[self addZero:components.month],[self addZero:components.day],dateStr];
-       
-                [self writeData:[NSString stringWithFormat:@"开始时间:%@\n结束时间:%@",startTime,endTime] toText:_timeText];
+                [self selectHHmm:1];
             }else{
-                endTime=[NSString stringWithFormat:@"%@ %@",selectDate,dateStr];
-                [self writeData:[NSString stringWithFormat:@"开始时间:%@\n结束时间:%@",startTime,endTime] toText:_timeText];
+                if(selectedIndex==1){
+                    NSDateComponents *components=[[NSCalendar currentCalendar] components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour|NSCalendarUnitMinute fromDate:[NSDate new]];
+                    
+                    endTime=[NSString stringWithFormat:@"%d-%@-%@ %@",components.year,[self addZero:components.month],[self addZero:components.day],dateStr];
+                    
+                    [self writeData:[NSString stringWithFormat:@"开始时间:%@\n结束时间:%@",startTime,endTime] toText:_timeText];
+                }else{
+                    endTime=[NSString stringWithFormat:@"%@ %@",selectDate,dateStr];
+                    [self writeData:[NSString stringWithFormat:@"开始时间:%@\n结束时间:%@",startTime,endTime] toText:_timeText];
+                }
+                
             }
-          
+
         }
         
         
