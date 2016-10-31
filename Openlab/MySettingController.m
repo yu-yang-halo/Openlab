@@ -31,9 +31,9 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     
-     self.title=@"设置";
+     self.title=@"个人中心";
    
-
+    self.automaticallyAdjustsScrollViewInsets=NO;
     
     self.btn_realname.layer.cornerRadius=self.btn_realname.bounds.size.height/2;
     self.exitBtn.layer.cornerRadius=5;
@@ -104,9 +104,13 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     
-    UIViewController *vc=segue.destinationViewController;
+    if([sender isKindOfClass:[NSNumber class]]){
+        
+        UIViewController *vc=segue.destinationViewController;
+        
+        vc.title=items[[sender intValue]];
+    }
     
-    vc.title=items[[sender intValue]];
     
 }
 
