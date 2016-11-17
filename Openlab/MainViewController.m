@@ -57,8 +57,10 @@
     
     
     self.reservationButton.layer.cornerRadius=25;
+    CGRect frame=self.viewContainerHeader.bounds;
+    frame.size.width=self.view.frame.size.width;
     
-    MyRadioGroupView *radioGroupView=[[MyRadioGroupView alloc] initWithFrame:self.viewContainerHeader.bounds];
+    MyRadioGroupView *radioGroupView=[[MyRadioGroupView alloc] initWithFrame:frame];
     [radioGroupView setButtonImages:@[@"icon_normal0",@"icon_temp0"] selecteds:@[@"icon_normal1",@"icon_temp1"]];
     [radioGroupView setRadioButtonClickBlock:^(NSInteger tag) {
        

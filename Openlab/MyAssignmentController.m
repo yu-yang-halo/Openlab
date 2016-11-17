@@ -38,11 +38,13 @@
     
     self.menu = [[JSDropDownMenu alloc] initWithOrigin:CGPointMake(0, 64) andHeight:45];
 
+    
     _menu.indicatorColor = [UIColor colorWithRed:175.0f/255.0f green:175.0f/255.0f blue:175.0f/255.0f alpha:1.0];
     _menu.separatorColor = [UIColor colorWithRed:210.0f/255.0f green:210.0f/255.0f blue:210.0f/255.0f alpha:1.0];
     _menu.textColor = [UIColor colorWithRed:83.f/255.0f green:83.f/255.0f blue:83.f/255.0f alpha:1.0f];
     _menu.dataSource = self;
     _menu.delegate = self;
+
     
     [self.view addSubview:_menu];
     
@@ -65,7 +67,7 @@
         // 进入刷新状态后会自动调用这个block
         [self loadTableData];
     }];
-    [self.tableView setBackgroundColor:[UIColor colorWithWhite:0.95 alpha:1]];
+    [self.tableView setBackgroundColor:[UIColor colorWithWhite:1 alpha:1]];
 
     [self.view addSubview:_tableView];
     
