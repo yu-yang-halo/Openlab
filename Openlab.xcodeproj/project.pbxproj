@@ -34,6 +34,9 @@
 		8449C5521CD9F06C00893D9F /* ReservationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8449C5501CD9F06C00893D9F /* ReservationTableViewCell.m */; };
 		8449C5531CD9F06C00893D9F /* ReservationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8449C5511CD9F06C00893D9F /* ReservationTableViewCell.xib */; };
 		8458AAFB1D0FE2CE00CFD2A0 /* MyExpandTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8458AAFA1D0FE2CE00CFD2A0 /* MyExpandTableView.m */; };
+		8485EB191DE5478F007FE147 /* AudioManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8485EB181DE5478F007FE147 /* AudioManagerHelper.m */; };
+		8485EB1B1DE547EB007FE147 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8485EB1A1DE547EB007FE147 /* AudioToolbox.framework */; };
+		8485EB1E1DE6C2F6007FE147 /* UIColor+hexStr.m in Sources */ = {isa = PBXBuildFile; fileRef = 8485EB1D1DE6C2F6007FE147 /* UIColor+hexStr.m */; };
 		84A42C041CDB199600710DBA /* TimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A42C031CDB199500710DBA /* TimeUtils.m */; };
 		84A6E4831D67E184001AD233 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 84A6E4821D67E184001AD233 /* InfoPlist.strings */; };
 		84BE21101CD337F10014BF87 /* jpush-ios-2.1.6.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C51A051CC8CB1D004450FA /* jpush-ios-2.1.6.a */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -134,6 +137,11 @@
 		8449C5511CD9F06C00893D9F /* ReservationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReservationTableViewCell.xib; sourceTree = "<group>"; };
 		8458AAF91D0FE2CE00CFD2A0 /* MyExpandTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyExpandTableView.h; sourceTree = "<group>"; };
 		8458AAFA1D0FE2CE00CFD2A0 /* MyExpandTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyExpandTableView.m; sourceTree = "<group>"; };
+		8485EB171DE5478F007FE147 /* AudioManagerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioManagerHelper.h; sourceTree = "<group>"; };
+		8485EB181DE5478F007FE147 /* AudioManagerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioManagerHelper.m; sourceTree = "<group>"; };
+		8485EB1A1DE547EB007FE147 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		8485EB1C1DE6C2F6007FE147 /* UIColor+hexStr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+hexStr.h"; sourceTree = "<group>"; };
+		8485EB1D1DE6C2F6007FE147 /* UIColor+hexStr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+hexStr.m"; sourceTree = "<group>"; };
 		84A42C021CDB199500710DBA /* TimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeUtils.h; sourceTree = "<group>"; };
 		84A42C031CDB199500710DBA /* TimeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeUtils.m; sourceTree = "<group>"; };
 		84A6E4821D67E184001AD233 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
@@ -186,6 +194,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8485EB1B1DE547EB007FE147 /* AudioToolbox.framework in Frameworks */,
 				84BE211A1CD33DBF0014BF87 /* CoreTelephony.framework in Frameworks */,
 				84BE21181CD33D150014BF87 /* CFNetwork.framework in Frameworks */,
 				84BE21161CD33D0E0014BF87 /* MobileCoreServices.framework in Frameworks */,
@@ -329,6 +338,8 @@
 		84C519B71CC5DE3A004450FA /* common */ = {
 			isa = PBXGroup;
 			children = (
+				8485EB1C1DE6C2F6007FE147 /* UIColor+hexStr.h */,
+				8485EB1D1DE6C2F6007FE147 /* UIColor+hexStr.m */,
 				8445D2441D41F9C000C147D6 /* ImageUtils.h */,
 				8445D2451D41F9C000C147D6 /* ImageUtils.m */,
 				84A42C021CDB199500710DBA /* TimeUtils.h */,
@@ -336,6 +347,8 @@
 				84C519B81CC5DE73004450FA /* Constants.h */,
 				84C519B91CC5FDFA004450FA /* MyStringUtils.h */,
 				84C519BA1CC5FDFA004450FA /* MyStringUtils.m */,
+				8485EB171DE5478F007FE147 /* AudioManagerHelper.h */,
+				8485EB181DE5478F007FE147 /* AudioManagerHelper.m */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -444,6 +457,7 @@
 		9ECB36B1BBDF052D995C6F7F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8485EB1A1DE547EB007FE147 /* AudioToolbox.framework */,
 				84BE21191CD33DBF0014BF87 /* CoreTelephony.framework */,
 				84BE21171CD33D150014BF87 /* CFNetwork.framework */,
 				84BE21151CD33D0E0014BF87 /* MobileCoreServices.framework */,
@@ -650,6 +664,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8485EB1E1DE6C2F6007FE147 /* UIColor+hexStr.m in Sources */,
 				84090CFC1DBDAD8B00C277FC /* ScoreViewController.m in Sources */,
 				84C519E01CC71909004450FA /* MySettingController.m in Sources */,
 				84283EEC1CD20ACF0039ED83 /* UIButton+Animation.m in Sources */,
@@ -670,6 +685,7 @@
 				84C519F31CC777EF004450FA /* KMDatePickerDateModel.m in Sources */,
 				840FEE521CB622C80056C7BE /* AppDelegate.m in Sources */,
 				84C519E61CC73307004450FA /* MyRadioGroupView.m in Sources */,
+				8485EB191DE5478F007FE147 /* AudioManagerHelper.m in Sources */,
 				84C4DFE21D1A58930043F012 /* AssignmentTableViewCell.m in Sources */,
 				8449C5521CD9F06C00893D9F /* ReservationTableViewCell.m in Sources */,
 				8445D2401D41BEF600C147D6 /* UploadCollectionViewCell.m in Sources */,

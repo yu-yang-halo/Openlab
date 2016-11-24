@@ -31,7 +31,7 @@
     [super viewDidLoad];
      self.title=@"我的作业";
      self.semeArr=@[@"第一学期",@"第二学期"];
-     self.yearArr=@[@"2016",@"2017"];
+     self.yearArr=@[@"2016"];
      selectYear=-1;
      selectSemester=-1;
     
@@ -44,6 +44,7 @@
     _menu.textColor = [UIColor colorWithRed:83.f/255.0f green:83.f/255.0f blue:83.f/255.0f alpha:1.0f];
     _menu.dataSource = self;
     _menu.delegate = self;
+    
 
     
     [self.view addSubview:_menu];
@@ -54,13 +55,22 @@
 
     [_tableView setViewControllerDelegate:self];
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
-    [_tableView beginLoadChildData:^(NSString *courseCode) {
-        if(![self hasExists:courseCode]){
+    [_tableView beginLoadChildData:^(NSString *courseCode,BOOL useCache) {
+        
+        if(![self hasExists:courseCode]||!useCache){
             Turple *turple=[[ElApiService shareElApiService] getAssignmentList:courseCode];
             
-            [self addAssignments:turple toCourseCode:courseCode];
+            ScoreType *scoreType=[[ElApiService shareElApiService] getStudentScoreList:courseCode];
             
+            if(scoreType.status==1){
+                turple.scoreType=scoreType;
+            }
+            [self addAssignments:turple toCourseCode:courseCode];
         }
+        
+        
+
+        
 
     }];
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -82,11 +92,38 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        self.yearArr=[[ElApiService shareElApiService] getSemesterList];
+        NSArray *arr=[[ElApiService shareElApiService] getSemesterList];
+        
+        self.yearArr=[arr sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+           
+            return [obj1 intValue]-[obj2 intValue]<0?NSOrderedAscending:NSOrderedDescending;
+            
+        }];
+        
+        
+        NSArray *yearSemesterArr=[[ElApiService shareElApiService] getCurrentSemester];
         
         
         dispatch_async(dispatch_get_main_queue(), ^{
            
+            if(yearSemesterArr!=nil&&[yearSemesterArr count]==2){
+                
+                 for(int i=0;i<[_yearArr count];i++) {
+                     if([_yearArr[i] isEqualToString:yearSemesterArr[0]]){
+                         selectYear=i;
+                         break;
+                     }
+                     
+                 }
+                 selectYear=0;
+                 selectSemester=[yearSemesterArr[1] intValue]-1;
+                
+                
+                _menu.dataSource = self;
+                _menu.delegate = self;
+                
+                [self loadTableData];
+            }
             
             
         });
@@ -98,9 +135,7 @@
 
 
 -(void)viewWillAppear:(BOOL)animated{
-    [_tableView reloadChildData];
-    
-
+    [_tableView reloadChildDataUseCache:NO];
 }
 
 
@@ -127,6 +162,8 @@
             
             [courseType setAssignmentTypes:turple.assignmentTypes];
             [courseType setReportInfos:turple.reportInfos];
+            [courseType setScoreType:turple.scoreType];
+            
             break;
         }
         
@@ -144,6 +181,8 @@
         }
         
         self.courseTypeList=[[ElApiService shareElApiService] getLabCourseList:_yearArr[selectYear] semester:(selectSemester+1)];
+        
+        
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [_tableView setCourseDatas:_courseTypeList];
@@ -184,9 +223,21 @@
 }
 - (NSString *)menu:(JSDropDownMenu *)menu titleForColumn:(NSInteger)column{
     switch (column) {
-        case 0: return @"选择学年";
+        case 0:
+            if(selectYear<0){
+                return @"选择学年";
+            }else{
+                return _yearArr[selectYear];
+            }
+           
             break;
-        case 1: return @"选择学期";
+        case 1:
+            if(selectSemester<0){
+                return @"选择学期";
+            }else{
+                return _semeArr[selectSemester];
+            }
+            
             break;
         default:
             return nil;

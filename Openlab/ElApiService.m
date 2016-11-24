@@ -45,7 +45,7 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     
 }
 -(NSString *)getWebImageURL:(NSString *)imageName{
-    return [NSString stringWithFormat:@"http://%@/openlabweb/upload/%@",WEBSERVICE_IP,imageName];
+    return [NSString stringWithFormat:@"http://%@:8080/labdoc/upload/%@",WEBSERVICE_IP,imageName];
 }
 -(void)setIWSErrorCodeListenerBlock:(ErrorCodeHandlerBlock)block{
     self.block=block;
@@ -262,7 +262,12 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
         if([errorCodeVal isEqualToString:@"0"]){
             return YES;
         }else{
-            [self notificationErrorCode:errorCodeVal];
+            if(errorCodeVal==nil){
+                [self notificationMessage:@"服务器繁忙,请稍候重试"];
+            }else{
+                 [self notificationErrorCode:errorCodeVal];
+            }
+           
         }
         
     }
@@ -320,6 +325,81 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
  openlab 接口
  ***********************************
  */
+
+#pragma mark return YES --可以预约  NO --不可以预约
+-(BOOL)checkResvPeriod:(int)labId weekDay:(int)weekDay startHr:(int)startHr startMin:(int)startMin endHr:(int)endHr endMin:(int)endMin{
+    NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
+    NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
+    NSString *service=[NSString stringWithFormat:@"%@checkResvPeriod?senderId=%@&secToken=%@&labId=%d&weekDay=%d&startHr=%d&startMin=%d&endHr=%d&endMin=%d",self.openlabUrl,userID,secToken,labId,weekDay,startHr,startMin,endHr,endMin];
+    
+    NSLog(@"checkResvPeriod service:%@",service);
+    
+    NSData *data=[self requestURLSync:service];
+    if(data!=nil){
+        GDataXMLElement *rootElement=[self getRootElementByData:data];
+        
+        NSString* errorCodeVal=[[[rootElement elementsForName:@"errorCode"] objectAtIndex:0] stringValue];
+        
+        if([errorCodeVal isEqualToString:@"0"]){
+            //冲突--->时间已经在里面，无法预约
+            //不冲突--->时间不在里面，可以预约
+            
+            NSString* conflictVal=[[[rootElement elementsForName:@"conflict"] objectAtIndex:0] stringValue];
+            
+            if([conflictVal isEqualToString:@"false"]){
+                return YES;
+            }else{
+                NSString* startHrVal=[[[rootElement elementsForName:@"startHr"] objectAtIndex:0] stringValue];
+                NSString* startMinVal=[[[rootElement elementsForName:@"startMin"] objectAtIndex:0] stringValue];
+                NSString* endHrVal=[[[rootElement elementsForName:@"endHr"] objectAtIndex:0] stringValue];
+                NSString* endMinVal=[[[rootElement elementsForName:@"endMin"] objectAtIndex:0] stringValue];
+                
+                [self notificationMessage:[NSString stringWithFormat:@"对不起，当天的时间段%@:%@-%@:%@无法预约",startHrVal,startMinVal,endHrVal,endMinVal]];
+                
+                
+                return NO;
+            }
+        }else{
+            
+            return NO;
+        }
+    }
+    return NO;
+}
+
+#pragma mark return arr-->[year,semester]
+-(NSArray *)getCurrentSemester{
+    NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
+    NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
+    
+    
+    NSString *service=[NSString stringWithFormat:@"%@getCurrentSemester?senderId=%@&secToken=%@",self.openlabUrl,userID,secToken];
+    
+    NSLog(@"getCurrentSemester service:%@",service);
+    NSData *data=[self requestURLSync:service];
+    if(data!=nil){
+        GDataXMLElement *rootElement=[self getRootElementByData:data];
+        
+        NSString* errorCodeVal=[[[rootElement elementsForName:@"errorCode"] objectAtIndex:0] stringValue];
+        
+        if([errorCodeVal isEqualToString:@"0"]){
+            NSString* yearVal=[[[rootElement elementsForName:@"year"] objectAtIndex:0] stringValue];
+            NSString* semesterVal=[[[rootElement elementsForName:@"semester"] objectAtIndex:0] stringValue];
+            
+            if (yearVal==nil||semesterVal==nil) {
+                return @[@"2018",@"1"];
+            }
+            return @[yearVal,semesterVal];
+        }else{
+            [self notificationErrorCode:errorCodeVal];
+        }
+    }
+    
+    
+    return nil;
+    
+}
+
 
 -(NSArray *)getSemesterList{
     NSString *service=[NSString stringWithFormat:@"%@getSemesterList?senderId=1&secToken=1",self.openlabUrl];
@@ -702,6 +782,7 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
 }
 
 
+
 /*
  ***********************************************************
  *  end ...
@@ -714,8 +795,14 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     reportInfo.assignmentId=[[[[element elementsForName:@"assignmentId"] objectAtIndex:0] stringValue] intValue];
     reportInfo.courseCode=[[[element elementsForName:@"courseCode"] objectAtIndex:0] stringValue];
     reportInfo.desc=[[[element elementsForName:@"description"] objectAtIndex:0] stringValue];
-    reportInfo.fileName=[[[element elementsForName:@"attachFileName"] objectAtIndex:0] stringValue];
+    reportInfo.attachFileName=[[[element elementsForName:@"attachFileName"] objectAtIndex:0] stringValue];
     reportInfo.submitTime=[[[element elementsForName:@"submitTime"] objectAtIndex:0] stringValue];
+    
+    reportInfo.score=[[[[element elementsForName:@"score"] objectAtIndex:0] stringValue] floatValue];
+    reportInfo.givenBy=[[[[element elementsForName:@"givenBy"] objectAtIndex:0] stringValue] intValue];
+    reportInfo.givenTime=[[[element elementsForName:@"givenTime"] objectAtIndex:0] stringValue];
+    reportInfo.scoreComment=[[[element elementsForName:@"scoreComment"] objectAtIndex:0] stringValue];
+    reportInfo.status=[[[[element elementsForName:@"status"] objectAtIndex:0] stringValue] intValue];
     
     return reportInfo;
 }
@@ -732,6 +819,8 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     
     assignmentType.createdTime=[[[element elementsForName:@"createdTime"] objectAtIndex:0] stringValue];
     
+    assignmentType.topic=[[[element elementsForName:@"topic"] objectAtIndex:0] stringValue];
+    assignmentType.status=[[[[element elementsForName:@"status"] objectAtIndex:0] stringValue] intValue];
     return assignmentType;
 }
 
@@ -825,6 +914,18 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     }
     return ;
 }
+-(void)notificationMessage:(NSString *)message{
+    if([NSThread isMainThread]){
+        _block(@"Message",message);
+    }else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _block(@"Message",message);
+        });
+    }
+    return ;
+}
+
+
 -(GDataXMLElement *)getRootElementByData:(NSData *)data{
     GDataXMLDocument *doc=[[GDataXMLDocument alloc] initWithData:data options:0 error:nil];
     GDataXMLElement *rootElement=[doc rootElement];

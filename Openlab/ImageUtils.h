@@ -9,7 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 @interface ImageUtils : NSObject
+
 +(NSString *)encodeToBase64String:(UIImage *)image format:(NSString *)PNGorJPEG;
 +(UIImage *)decodeBase64ToImage:(NSString *)strEncodeData;
+
+
 
 @end

@@ -81,11 +81,20 @@
     return [dateFormatter2 stringFromDate:date];
 }
 
-+(BOOL)isOverTime:(NSString *)endTime{
++(BOOL)isOverTime:(NSString *)time format:(NSString *)format{
     
     NSDate *currentTime=[NSDate new];
-    NSDate *serverEndTime =[self normalDate:endTime];
-    NSComparisonResult result=[currentTime compare:serverEndTime];
+    currentTime=[currentTime dateByAddingTimeInterval:8*60*60];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    //2016-04-09T16:30:53.000+08:00
+    [dateFormatter setDateFormat:format];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    
+    
+    NSDate *formatTime = [dateFormatter dateFromString:time];
+   
+    NSComparisonResult result=[currentTime compare:formatTime];
     
     if(result==NSOrderedAscending||result==NSOrderedSame){
         return NO;
@@ -172,6 +181,16 @@
     NSDateComponents *dateComponentsForDate = [greCalendar components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekCalendarUnit | NSWeekdayCalendarUnit | NSWeekOfMonthCalendarUnit | NSWeekOfYearCalendarUnit fromDate:[NSDate date]];
     
     return dateComponentsForDate.year;
+}
+
+
++(NSArray *)weekHourMinArrs:(NSDate *)date{
+    NSCalendar *greCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDateComponents *dateComponentsForDate = [greCalendar components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekCalendarUnit | NSWeekdayCalendarUnit | NSWeekOfMonthCalendarUnit | NSWeekOfYearCalendarUnit fromDate:date];
+    
+  
+    return @[@(dateComponentsForDate.weekday),@(dateComponentsForDate.hour),@(dateComponentsForDate.minute)];
+    
 }
 
 @end

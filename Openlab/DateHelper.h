@@ -36,4 +36,13 @@
  */
 + (NSString *)dateToString:(NSDate *)date withFormat:(NSString *)format;
 
+/**
+ *  根据时间获取对应的时间月份
+ *
+ *  @param date    时间
+ *  @return 月份
+ */
++(NSInteger)currentMonth:(NSDate *)date;
+
+
 @end

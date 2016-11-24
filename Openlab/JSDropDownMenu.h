@@ -74,6 +74,11 @@
 @property (nonatomic, strong) UIColor *indicatorColor;
 @property (nonatomic, strong) UIColor *textColor;
 @property (nonatomic, strong) UIColor *separatorColor;
+
+@property (nonatomic, strong) UITableView *leftTableView;
+@property (nonatomic, strong) UITableView *rightTableView;
+@property (nonatomic, strong) UICollectionView *collectionView;
+
 /**
  *  the width of menu will be set to screen width defaultly
  *

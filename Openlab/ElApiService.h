@@ -41,11 +41,22 @@ static ElApiService* shareService=nil;
 -(BOOL)updateUser:(NSString *)loginName phone:(NSString *)phone pass:(NSString *)pwd vcode:(NSString *)vcode;
 
 
+
+
+
+
+
+
 /*
  ** openlab api
  **
  */
+-(BOOL)checkResvPeriod:(int)labId weekDay:(int)weekDay startHr:(int)startHr startMin:(int)startMin endHr:(int)endHr endMin:(int)endMin;
+
+-(NSArray *)getCurrentSemester;
+
 -(NSArray *)getSemesterList;
+
 -(NSArray *)getLabCourseList:(NSString *)currerYear semester:(int)seme;
 -(NSArray *)getLabListByIncDesk:(BOOL)incDesk;
 -(BOOL)AddOrUpdAssignment:(int)asId courseCode:(NSString *)arg0 desc:(NSString *)arg1 dueDate:(NSString *)arg2;

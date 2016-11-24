@@ -12,7 +12,9 @@
 +(NSString *)createTimeString:(int)row column:(int)col;
 +(NSString *)normalShowTime:(NSString *)serverTime;
 +(NSString *)normalShowTime:(NSString *)serverTime format:(NSString *)format;
-+(BOOL)isOverTime:(NSString *)endTime;
+
++(BOOL)isOverTime:(NSString *)time format:(NSString *)format;
+
 +(NSString *)newDate:(int)incre;
 +(NSString *)createTimeHHMM:(NSString *)hhmm incre:(int)incre;
 +(NSString *)createTimeHHMM2:(NSString *)hhmm incre:(int)incre;
@@ -23,5 +25,10 @@
 
 +(NSString *)formatData:(NSString *)date from:(NSString *)formatFrom to:(NSString *)formatTo;
 +(NSInteger)toYear;
++(NSArray *)weekHourMinArrs:(NSDate *)date;
+
+
+
+
 
 @end

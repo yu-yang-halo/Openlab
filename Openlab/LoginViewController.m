@@ -54,13 +54,13 @@
         [self.passwordTF setText:cachePass];
     }
     
-    
-    
-    
-    
     [self.loginBtn addTarget:self action:@selector(login:) forControlEvents:UIControlEventTouchUpInside];
     [self launch];
     
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [self resignAllResponder];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -113,6 +113,8 @@
 
 
 -(void)login:(id)sender{
+    
+    [self resignAllResponder];
     
     NSString *loginName=self.loginNameTF.text;
     NSString *pass=self.passwordTF.text;
@@ -174,7 +176,10 @@
     //regVC
     [self performSegueWithIdentifier:@"regVC" sender:nil];
 }
-
+-(void)resignAllResponder{
+     [_loginNameTF resignFirstResponder];
+     [_passwordTF resignFirstResponder];
+}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
     

@@ -171,7 +171,7 @@
         
     }
     _minuteIndex = [_datePickerDateScrollTo.minute integerValue]/30;
-    _datePickerDateScrollTo.minute=[NSString stringWithFormat:@"%d",_minuteIndex*30];
+    _datePickerDateScrollTo.minute=[NSString stringWithFormat:@"%ld",_minuteIndex*30];
 }
 
 - (void)scrollToDateIndexPosition {
@@ -257,7 +257,8 @@
     _monthIndex = [_datePickerDateScrollTo.month integerValue] - 1;
     _dayIndex = [_datePickerDateScrollTo.day integerValue] - 1;
     _hourIndex = [_datePickerDateScrollTo.hour integerValue];
-    _minuteIndex = [_datePickerDateScrollTo.minute integerValue];
+ 
+    _minuteIndex = [_datePickerDateScrollTo.minute integerValue]/30;
     [self scrollToDateIndexPosition];
 }
 
@@ -811,7 +812,13 @@
     
     // 如果选择时间不在最小和最大限制时间范围内就滚动到有效的默认范围内
     if (![self validatedDate:_scrollToDate]) {
-        [self scrollToDateIndexPositionWithDate:_defaultLimitedDate];
+        
+        if([DateHelper currentMonth:_scrollToDate]==[DateHelper currentMonth:_maxLimitedDate]){
+            [self scrollToDateIndexPositionWithDate:_maxLimitedDate];
+        }else{
+            [self scrollToDateIndexPositionWithDate:_defaultLimitedDate];
+        }
+        
     }
 }
 

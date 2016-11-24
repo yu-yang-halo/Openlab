@@ -38,7 +38,7 @@ static BOOL isProduction = YES;
     
     [[ElApiService shareElApiService] setIWSErrorCodeListenerBlock:^(NSString *errorCode, NSString *errorMsg) {
        
-        if([errorCode isEqualToString:@"1006"]||[errorCode isEqualToString:@"1007"]){
+        if([errorCode isEqualToString:@"1006"]||[errorCode isEqualToString:@"1007"]||[errorCode isEqualToString:@"1005"]){
            [[[LGAlertView alloc] initWithTitle:@"提示" message:errorMsg style:LGAlertViewStyleAlert buttonTitles:@[@"确定"] cancelButtonTitle:@"取消" destructiveButtonTitle:nil actionHandler:^(LGAlertView *alertView, NSString *title, NSUInteger index) {
                [navigationVC popToRootViewControllerAnimated:YES];
            } cancelHandler:^(LGAlertView *alertView) {

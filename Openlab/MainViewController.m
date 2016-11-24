@@ -20,6 +20,7 @@
 #import "Constants.h"
 #import <LGAlertView/LGAlertView.h>
 #import "TimeUtils.h"
+#import "AudioManagerHelper.h"
 @interface MainViewController()<UITextFieldDelegate, KMDatePickerDelegate>
 {
     NSArray *labList;
@@ -64,7 +65,7 @@
     [radioGroupView setButtonImages:@[@"icon_normal0",@"icon_temp0"] selecteds:@[@"icon_normal1",@"icon_temp1"]];
     [radioGroupView setRadioButtonClickBlock:^(NSInteger tag) {
        
-        NSLog(@"select index %d",tag);
+        NSLog(@"select index %ld",tag);
         selectedIndex=tag;
         
         if(selectedIndex==0){
@@ -118,9 +119,11 @@
     });
     
 }
--(void)toReservation:(id)sender{
-    
+
+-(BOOL)popupWindow{
+    BOOL isNext=YES;
     if(_reservationButton.myButtonState!=UIButtonState_NORMAL){
+         isNext=NO;
         LGAlertView *alerView=[[LGAlertView alloc] initWithTitle:@"提示" message:@"是否重新预约" style:(LGAlertViewStyleAlert) buttonTitles:@[@"确定"] cancelButtonTitle:@"取消" destructiveButtonTitle:nil actionHandler:^(LGAlertView *alertView, NSString *title, NSUInteger index) {
             [_reservationButton setButtonState:UIButtonState_NORMAL];
             [self resetData];
@@ -133,7 +136,18 @@
         [alerView showAnimated:YES completionHandler:^{
             
         }];
+        
        
+    }
+    
+    return isNext;
+    
+    
+}
+
+-(void)toReservation:(id)sender{
+ 
+    if(![self popupWindow]){
         return;
     }
     
@@ -148,37 +162,69 @@
         
         NSLog(@"selectedIndex:%d,labId:%d,startTime:%@,endTime:%@",selectedIndex,labId,startTime,endTime);
         
+        
+   
+        
         NSDateFormatter *formatter=[[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+       
+        
         NSDate *date0=[formatter dateFromString:startTime];
         NSDate *date1=[formatter dateFromString:endTime];
         
         NSComparisonResult result=[date0 compare:date1];
         
+        
+        
+
+        
+        
+        
         if(result==NSOrderedDescending||result==NSOrderedSame){
             [self.view.window makeToast:@"开始时间不得大于或等于结束时间"];
+        }else if([TimeUtils isOverTime:startTime format:@"yyyy-MM-dd HH:mm:ss"]
+                ||[TimeUtils isOverTime:endTime format:@"yyyy-MM-dd HH:mm:ss"]){
+             [self.view.window makeToast:@"预约时间不得早于当前时间"];
         }else{
             [_reservationButton beginAnimation];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-               
-                
-                NSString *loginName=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERNAME];
                 
                 
-                BOOL addOrUpdSuccess=[[ElApiService shareElApiService] addOrUpdReservation:loginName startTime:startTime endTime:endTime deskNum:-1 labId:labId status:0 resvId:0];
+                NSArray *startModels=[TimeUtils weekHourMinArrs:date0];
+                NSArray *endModels=[TimeUtils weekHourMinArrs:date1];
                 
+                
+                BOOL resvNextYN=[[ElApiService shareElApiService] checkResvPeriod:labId weekDay:[startModels[0] intValue] startHr:[startModels[1]  intValue] startMin:[startModels[2]  intValue] endHr:[endModels[1] intValue] endMin:[endModels[2]  intValue]];
+                
+                
+                
+                
+                BOOL addOrUpdSuccess=NO;
+                
+                if(resvNextYN){
+                    NSString *loginName=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERNAME];
+                    
+                    
+                    addOrUpdSuccess=[[ElApiService shareElApiService] addOrUpdReservation:loginName startTime:startTime endTime:endTime deskNum:-1 labId:labId status:0 resvId:0];
+                }
                 dispatch_async(dispatch_get_main_queue(), ^{
-                   
+                    
                     if(addOrUpdSuccess){
                         [_reservationButton setButtonState:UIButtonState_COMPLETE];
+                        
+                        
+                        
                     }else{
                         [_reservationButton setButtonState:UIButtonState_FAILED];
+                    
+                        
                     }
+                    
+                    
                     
                 });
                 
             });
-            
         }
     }
     
@@ -188,6 +234,12 @@
 
 
 - (IBAction)selectLab:(id)sender {
+    
+    if(![self popupWindow]){
+        return;
+    }
+    
+    
     if(labList!=nil&&[labList count]>0){
     
         
@@ -213,6 +265,9 @@
 }
 
 - (IBAction)selectTime:(id)sender {
+    if(![self popupWindow]){
+        return;
+    }
     
     if(selectedIndex==0){
         [self selectDate];
@@ -253,7 +308,7 @@
     } datePickerStyle:KMDatePickerStyleYearMonthDay];
     
     datePicker.minLimitedDate = [[DateHelper localeDate] addMonthAndDay:0 days:0];
-    datePicker.maxLimitedDate = [datePicker.minLimitedDate addMonthAndDay:0 days:0];
+    datePicker.maxLimitedDate = [[DateHelper localeDate] addMonthAndDay:0 days:14];
     [datePicker setTitle:@"选择预约日期"];
     
     
@@ -276,13 +331,14 @@
                              [self addZero:[datePickerDate.hour intValue]],
                              [self addZero:[datePickerDate.minute intValue]]
                              ];
+    
+        
        
         if(datePickerDate==nil){
             [self writeData:@"" toText:_timeText];
             selectDate=@"";
             startTime=@"";
             endTime=@"";
-            
         }else{
             
             if(type==0){
@@ -296,11 +352,26 @@
                     
                     endTime=[NSString stringWithFormat:@"%d-%@-%@ %@",components.year,[self addZero:components.month],[self addZero:components.day],dateStr];
                     
-                    [self writeData:[NSString stringWithFormat:@"开始时间:%@\n结束时间:%@",startTime,endTime] toText:_timeText];
                 }else{
+                    
                     endTime=[NSString stringWithFormat:@"%@ %@",selectDate,dateStr];
+                    
+                }
+                
+                NSDate *date0=[TimeUtils dateFromString:startTime format:@"yyyy-MM-dd HH:mm:ss"];
+                
+                NSDate *date1=[TimeUtils dateFromString:endTime format:@"yyyy-MM-dd HH:mm:ss"];
+                
+                if([date0 compare:date1]==NSOrderedDescending){
+                    [self resetData];
+                    
+                    
+                    [self.view.window makeToast:@"开始时间不能大于结束时间"];
+                }else{
                     [self writeData:[NSString stringWithFormat:@"开始时间:%@\n结束时间:%@",startTime,endTime] toText:_timeText];
                 }
+                
+
                 
             }
 
@@ -308,6 +379,8 @@
         
         
     } datePickerStyle:KMDatePickerStyleHourMinute];
+    
+    
     
     if(type==0){
          [datePicker setTitle:@"开始时间"];
@@ -318,11 +391,10 @@
          [datePicker setScrollToDate:newDate0];
          [datePicker setTitle:@"结束时间"];
     }
-   
-    
-    
     [datePicker show];
 }
+
+
 -(NSString *)addZero:(int)val{
     if(val>=0&&val<10){
         return [NSString stringWithFormat:@"0%d",val];

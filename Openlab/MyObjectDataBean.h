@@ -69,19 +69,42 @@ typedef NS_ENUM(NSInteger,Semester){
 @property(nonatomic,assign) int asId;
 @property(nonatomic,assign) int createdBy;
 @property(nonatomic,strong) NSString *courseCode;
+@property(nonatomic,strong) NSString *topic;
+@property(nonatomic,assign) int status;//
 @property(nonatomic,strong) NSString *desc;
 @property(nonatomic,strong) NSString *dueDate;
 @property(nonatomic,strong) NSString *createdTime;
+
 @end
 
 @interface ReportInfo : NSObject
 @property(nonatomic,assign) int reportId;
 @property(nonatomic,assign) int userId;
 @property(nonatomic,assign) int assignmentId;
+@property(nonatomic,assign) int givenBy;
+@property(nonatomic,assign) int  status;
+@property(nonatomic,assign) float score;
+
 @property(nonatomic,strong) NSString *courseCode;
 @property(nonatomic,strong) NSString *desc;
-@property(nonatomic,strong) NSString *fileName;
+@property(nonatomic,strong) NSString *attachFileName;
 @property(nonatomic,strong) NSString *submitTime;
+@property(nonatomic,strong) NSString *scoreComment;
+@property(nonatomic,strong) NSString *givenTime;
+
+
+
+@end
+
+
+
+@interface ScoreType : NSObject
+@property(nonatomic,assign) int studentId;
+@property(nonatomic,strong) NSString *courseCode;
+@property(nonatomic,assign) float score;
+@property(nonatomic,strong) NSString *comment;
+@property(nonatomic,assign) short status;
+@property(nonatomic,strong) NSString *courseName;
 @end
 
 
@@ -96,21 +119,16 @@ typedef NS_ENUM(NSInteger,Semester){
 @property(nonatomic,assign) BOOL isExpandYN;
 
 @property(nonatomic,strong) NSArray *reportInfos;
-@end
+@property(nonatomic,strong) ScoreType *scoreType;
 
-@interface ScoreType : NSObject
-@property(nonatomic,assign) int studentId;
-@property(nonatomic,strong) NSString *courseCode;
-@property(nonatomic,assign) float score;
-@property(nonatomic,strong) NSString *comment;
-@property(nonatomic,assign) short status;
-@property(nonatomic,strong) NSString *courseName;
 @end
-
 
 @interface Turple : NSObject
 
 @property(nonatomic,strong) NSArray<AssignmentType *> *assignmentTypes;
 @property(nonatomic,strong) NSArray<ReportInfo *> *reportInfos;
+
+@property(nonatomic,strong) ScoreType *scoreType;
+
 
 @end

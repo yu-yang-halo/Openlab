@@ -63,6 +63,10 @@
     
 }
 
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [firstResponderTF resignFirstResponder];
+}
+
 -(void)getVCode:(id)sender{
     NSString *phone =self.phoneTF.text;
     if(![MyStringUtils isMobileNumber:phone]){
@@ -91,6 +95,9 @@
 }
 
 -(void)beginRegister:(id)sender{
+    
+    [firstResponderTF resignFirstResponder];
+    
     NSString *number   =self.numberTF.text;
     NSString *password =self.passwordTF.text;
     NSString *repassword =self.repasswordTF.text;

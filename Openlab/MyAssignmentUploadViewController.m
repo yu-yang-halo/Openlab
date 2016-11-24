@@ -137,7 +137,7 @@
     hud.labelText=@"数据加载中";
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if(_mreportInfo!=nil){
-            NSArray *arr=[_mreportInfo.fileName componentsSeparatedByString:@","];
+            NSArray *arr=[_mreportInfo.attachFileName componentsSeparatedByString:@","];
             
             for (NSString *name in arr) {
                 NSString *url=[[ElApiService shareElApiService] getWebImageURL:name];

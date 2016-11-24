@@ -39,10 +39,11 @@
     self.exitBtn.layer.cornerRadius=5;
     
     
-    items=@[@"我的成绩",@"关于"];
+    items=@[@"关于我们"];
     self.tableView.delegate=self;
     self.tableView.dataSource=self;
     [_tableView setBackgroundColor:[UIColor clearColor]];
+    [_tableView setSeparatorStyle:(UITableViewCellSeparatorStyleNone)];
     
     _tableView.tableFooterView=[[UIView alloc] initWithFrame:CGRectZero];
     
@@ -86,18 +87,21 @@
     cell.textLabel.text=items[indexPath.row];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     
+    UIView *selectBGView=[[UIView alloc] initWithFrame:cell.bounds];
+    [selectBGView setBackgroundColor:[UIColor colorWithWhite:0.5 alpha:0.1]];
+    [cell setSelectedBackgroundView:selectBGView];
+    
+    
     
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if(indexPath.row==0){
-        [self performSegueWithIdentifier:@"scoreVC" sender:@(indexPath.row)];
-    }else{
-        [self performSegueWithIdentifier:@"aboutVC" sender:@(indexPath.row)];
-    }
+     [self performSegueWithIdentifier:@"aboutVC" sender:@(indexPath.row)];
     
+    
+    [[tableView cellForRowAtIndexPath:indexPath] setSelected:NO];
     
 }
 
@@ -112,6 +116,10 @@
     }
     
     
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    return 60;
 }
 
 @end

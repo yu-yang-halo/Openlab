@@ -31,4 +31,13 @@
     return [formatter stringFromDate:date];
 }
 
++(NSInteger)currentMonth:(NSDate *)date{
+    NSCalendar *greCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDateComponents *dateComponentsForDate = [greCalendar components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekCalendarUnit | NSWeekdayCalendarUnit | NSWeekOfMonthCalendarUnit | NSWeekOfYearCalendarUnit fromDate:date];
+    
+    
+    return dateComponentsForDate.month;
+    
+}
+
 @end
