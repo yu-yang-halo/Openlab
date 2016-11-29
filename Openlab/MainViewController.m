@@ -124,7 +124,7 @@
     BOOL isNext=YES;
     if(_reservationButton.myButtonState!=UIButtonState_NORMAL){
          isNext=NO;
-        LGAlertView *alerView=[[LGAlertView alloc] initWithTitle:@"提示" message:@"是否重新预约" style:(LGAlertViewStyleAlert) buttonTitles:@[@"确定"] cancelButtonTitle:@"取消" destructiveButtonTitle:nil actionHandler:^(LGAlertView *alertView, NSString *title, NSUInteger index) {
+        LGAlertView *alerView=[[LGAlertView alloc] initWithTitle:@"提示" message:@"是否继续预约" style:(LGAlertViewStyleAlert) buttonTitles:@[@"确定"] cancelButtonTitle:@"取消" destructiveButtonTitle:nil actionHandler:^(LGAlertView *alertView, NSString *title, NSUInteger index) {
             [_reservationButton setButtonState:UIButtonState_NORMAL];
             [self resetData];
         } cancelHandler:^(LGAlertView *alertView) {
@@ -212,7 +212,7 @@
                     if(addOrUpdSuccess){
                         [_reservationButton setButtonState:UIButtonState_COMPLETE];
                         
-                        
+                        [self performSelector:@selector(toTabVC:) withObject:nil afterDelay:0.5];
                         
                     }else{
                         [_reservationButton setButtonState:UIButtonState_FAILED];
@@ -231,7 +231,11 @@
     
 }
 
-
+-(void)toTabVC:(id)sender{
+    [_reservationButton setButtonState:UIButtonState_NORMAL];
+    [self resetData];
+    [self.tabBarController setSelectedIndex:1];
+}
 
 - (IBAction)selectLab:(id)sender {
     

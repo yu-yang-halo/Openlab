@@ -186,6 +186,15 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     
     if(loginName!=nil){
         [appendStr appendFormat:@"&name=%@",loginName];
+        //PB14210099
+        //05650
+        if(loginName.length>=10){
+            [appendStr appendFormat:@"&userRole=%@",@"student"];
+        }else{
+            [appendStr appendFormat:@"&userRole=%@",@"teacher"];
+        }
+    }else{
+        [appendStr appendFormat:@"&userRole=%@",@"student"];
     }
     if(vcode!=nil){
         [appendStr appendFormat:@"&vCode=%@",vcode];
@@ -193,6 +202,9 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     if(phone!=nil){
         [appendStr appendFormat:@"&phone=%@",phone];
     }
+    
+   
+    
     
     NSString *service=[NSString stringWithFormat:@"%@updateUser?senderId=%@&secToken=%@&userId=%@&password=%@%@",self.authapiUrl,userID,secToken,userID,[WsqMD5Util getmd5WithString:pwd],appendStr];
     
@@ -237,13 +249,25 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
         [appendStr appendFormat:@"&phone=%@",userType.phone];
         
     }
-    if(userType.userRole!=nil){
-        [appendStr appendFormat:@"&userRole=%@",userType.userRole];
-        
-    }
+  
     if(userType.cardId!=nil){
         [appendStr appendFormat:@"&cardId=%@",userType.cardId];
         
+    }
+    
+    if(userType.name!=nil){
+        
+        
+        //PB14210099
+        //05650
+        
+        if(userType.name.length>=10){
+            [appendStr appendFormat:@"&userRole=%@",@"student"];
+        }else{
+            [appendStr appendFormat:@"&userRole=%@",@"teacher"];
+        }
+        
+       
     }
     
     
@@ -360,7 +384,7 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
                 return NO;
             }
         }else{
-            
+            [self notificationErrorCode:errorCodeVal];
             return NO;
         }
     }

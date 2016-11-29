@@ -84,7 +84,8 @@
 +(BOOL)isOverTime:(NSString *)time format:(NSString *)format{
     
     NSDate *currentTime=[NSDate new];
-    currentTime=[currentTime dateByAddingTimeInterval:8*60*60];
+    //三分钟内都可
+    currentTime=[currentTime dateByAddingTimeInterval:(8*60*60-3*60)];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     //2016-04-09T16:30:53.000+08:00

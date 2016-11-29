@@ -14,6 +14,7 @@
 #import "TimeUtils.h"
 #import <UIView+Toast.h>
 #import <MJRefresh/MJRefresh.h>
+#import <LGAlertView/LGAlertView.h>
 @interface MyReservationController()<UITableViewDataSource,UITableViewDelegate>
 {
     NSArray<ReservationType *> *reservationArr;
@@ -173,19 +174,36 @@
     return cell;
 }
 -(void)cancelReservation:(UIButton *)sender{
-    int index=sender.tag;
-    ReservationType *reservationOBJ=[currentArr objectAtIndex:index];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-         BOOL isSuccessYN=[[ElApiService shareElApiService] addOrUpdReservation:userName startTime:[TimeUtils normalShowTime:reservationOBJ.startTime] endTime:[TimeUtils normalShowTime:reservationOBJ.endTime] deskNum:reservationOBJ.deskNum labId:reservationOBJ.labId status:STATUS_CANCEL resvId:reservationOBJ.resvId];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(isSuccessYN){
-                 [self netDataGet];
-            }else{
-                [self.view.window makeToast:@"无法取消"];
-            }
-           
+ 
+    LGAlertView *alerView=[[LGAlertView alloc] initWithTitle:@"提示" message:@"是否取消当前预约" style:(LGAlertViewStyleAlert) buttonTitles:@[@"是"] cancelButtonTitle:@"否" destructiveButtonTitle:nil actionHandler:^(LGAlertView *alertView, NSString *title, NSUInteger index) {
+        
+    
+        ReservationType *reservationOBJ=[currentArr objectAtIndex:sender.tag];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            BOOL isSuccessYN=[[ElApiService shareElApiService] addOrUpdReservation:userName startTime:[TimeUtils normalShowTime:reservationOBJ.startTime] endTime:[TimeUtils normalShowTime:reservationOBJ.endTime] deskNum:reservationOBJ.deskNum labId:reservationOBJ.labId status:STATUS_CANCEL resvId:reservationOBJ.resvId];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(isSuccessYN){
+                    [self netDataGet];
+                }else{
+                    [self.view.window makeToast:@"无法取消"];
+                }
+                
+            });
         });
-    });
+        
+       
+    } cancelHandler:^(LGAlertView *alertView) {
+        
+    } destructiveHandler:^(LGAlertView *alertView) {
+        
+    }];
+    
+    [alerView showAnimated:YES completionHandler:^{
+        
+    }];
+    
+
+    
 }
 -(NSString *)findLabName:(int)labId{
     NSString *labName=@"";

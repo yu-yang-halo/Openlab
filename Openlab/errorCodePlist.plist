@@ -20,8 +20,6 @@
 	<string>用户名已经被使用</string>
 	<key>1039</key>
 	<string>超时，请重新登录</string>
-	<key>1100</key>
-	<string>内部错误</string>
 	<key>1009</key>
 	<string>账户不存在</string>
 	<key>1005</key>
@@ -30,6 +28,12 @@
 	<string>token失效，请重新登录</string>
 	<key>1007</key>
 	<string>token失效，请重新登录</string>
+	<key>1013</key>
+	<string>无效的学号</string>
+	<key>1100</key>
+	<string>预约时间验证失败,暂时无法预约</string>
+	<key>1104</key>
+	<string>该用户名已存在</string>
 	<key>2000</key>
 	<string>实验室信息无法添加到该系统</string>
 	<key>2001</key>

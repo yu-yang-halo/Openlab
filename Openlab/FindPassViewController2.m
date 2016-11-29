@@ -10,6 +10,7 @@
 #import <UIView+Toast.h>
 #import "MyStringUtils.h"
 #import "ElApiService.h"
+#import <LGAlertView/LGAlertView.h>
 @interface FindPassViewController2 ()<UITextFieldDelegate>{
     UITextField *firstResponderTF;
     CGFloat kbHeight;
@@ -55,8 +56,20 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 if(SUCCESS){
-                    [self.view.window makeToast:@"密码修改成功"];
-                    [self.navigationController popViewControllerAnimated:YES];
+                    LGAlertView *alerView=[[LGAlertView alloc] initWithTitle:@"提示" message:@"密码修改成功，请重新登录" style:(LGAlertViewStyleAlert) buttonTitles:@[@"确定"] cancelButtonTitle:nil destructiveButtonTitle:nil actionHandler:^(LGAlertView *alertView, NSString *title, NSUInteger index) {
+                       [self.navigationController popToRootViewControllerAnimated:YES];
+                    } cancelHandler:^(LGAlertView *alertView) {
+                        
+                    } destructiveHandler:^(LGAlertView *alertView) {
+                        
+                    }];
+                    [alerView setCancelOnTouch:NO];
+                    
+                    [alerView showAnimated:YES completionHandler:^{
+                        
+                    }];
+                    
+                    
                 }else{
                     [self.view.window makeToast:@"密码修改失败,请重试"];
                 }

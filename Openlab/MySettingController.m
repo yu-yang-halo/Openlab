@@ -100,11 +100,8 @@
     
      [self performSegueWithIdentifier:@"aboutVC" sender:@(indexPath.row)];
     
-    
     [[tableView cellForRowAtIndexPath:indexPath] setSelected:NO];
-    
 }
-
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     
