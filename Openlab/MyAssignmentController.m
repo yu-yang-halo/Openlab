@@ -30,7 +30,7 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
      self.title=@"我的作业";
-     self.semeArr=@[@"第一学期",@"第二学期"];
+     self.semeArr=@[@"第一学期",@"第二学期",@"第三学期"];
      self.yearArr=@[@"2016"];
      selectYear=-1;
      selectSemester=-1;
@@ -115,7 +115,10 @@
                      }
                      
                  }
-                 selectYear=0;
+                 if(selectYear<0){
+                     selectYear=0;
+                 }
+                
                  selectSemester=[yearSemesterArr[1] intValue]-1;
                 
                 

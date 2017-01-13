@@ -15,6 +15,8 @@
  *  @return 本地当前时间
  */
 + (NSDate *)localeDate;
++ (NSDate *)defaultDate;
+
 
 /**
  *  根据时间字符串和其格式，获取对应的时间

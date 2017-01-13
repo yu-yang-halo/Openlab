@@ -128,7 +128,7 @@
     
     // 滚动到指定时间；默认值为当前时间。如果是使用自定义时间小于最小限制时间，这时就以最小限制时间为准；如果是使用自定义时间大于最大限制时间，这时就以最大限制时间为准
     if (!_scrollToDate) {
-        _scrollToDate = [DateHelper localeDate];
+        _scrollToDate = [DateHelper defaultDate];
     }
     if ([_scrollToDate compare:_minLimitedDate] == NSOrderedAscending) {
         _scrollToDate = _minLimitedDate;
@@ -232,7 +232,7 @@
 }
 
 - (BOOL)canShowScrollToNowButton {
-    return [self validatedDate:[DateHelper localeDate]];
+    return [self validatedDate:[DateHelper defaultDate]];
 }
 
 - (void)cancel:(UIButton *)sender {
@@ -244,7 +244,7 @@
 }
 
 - (void)scrollToNowDateIndexPosition:(UIButton *)sender {
-    [self scrollToDateIndexPositionWithDate:[DateHelper localeDate]];
+    [self scrollToDateIndexPositionWithDate:[DateHelper defaultDate]];
 }
 
 - (void)scrollToDateIndexPositionWithDate:(NSDate *)date {

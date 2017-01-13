@@ -33,20 +33,24 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [firstResponderTF resignFirstResponder];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+
 - (IBAction)fixPass:(id)sender {
     NSString *nepass=self.nePassTF.text;
     NSString *repass=self.rePassTF.text;
 
-    
+    [firstResponderTF resignFirstResponder];
     
     if (![MyStringUtils isVaildPass:nepass]){
-        [self.view.window makeToast:@"密码至少为6个字符"];
+        [self.view.window makeToast:@"密码由6-20位的字母、数字、下划线组成"];
     }else if (![nepass isEqualToString:repass]){
         [self.view.window makeToast:@"两次输入密码不一致"];
     }else{

@@ -68,6 +68,7 @@
 }
 
 -(void)getVCode:(id)sender{
+    [firstResponderTF resignFirstResponder];
     NSString *phone =self.phoneTF.text;
     if(![MyStringUtils isMobileNumber:phone]){
         [self.view makeToast:@"请输入正确的手机号码"];
@@ -105,17 +106,17 @@
     NSString *phone =self.phoneTF.text;
     
     if([MyStringUtils isEmpty:number]){
-        [self.view.window makeToast:@"学生卡号不能为空"];
+        [self.view.window makeToast:@"学号或职工号不能为空"];
     }else if (![MyStringUtils isVaildPass:password]){
-        [self.view.window makeToast:@"密码至少为6位"];
-    }else if([MyStringUtils isEmpty:vcode]){
-        [self.view.window makeToast:@"验证码不能为空"];
+        [self.view.window makeToast:@"密码由6-20位的字母、数字、下划线组成"];
     }else if([MyStringUtils isEmpty:phone]){
         [self.view.window makeToast:@"手机号码不能为空"];
     }else if(![password isEqualToString:repassword]){
         [self.view.window makeToast:@"两次密码不一致"];
     }else if(![MyStringUtils isMobileNumber:phone]){
         [self.view.window makeToast:@"请输入正确的手机号码"];
+    }else if([MyStringUtils isEmpty:vcode]){
+        [self.view.window makeToast:@"验证码不能为空"];
     }else{
         MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.labelText=@"注册中...";

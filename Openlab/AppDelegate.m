@@ -197,12 +197,19 @@ fetchCompletionHandler:
 
 -(void)popupMessage:(NSString *)alertMessage{
     
-    
+  
     UIAlertView *alertView=[[UIAlertView alloc] initWithTitle:@"新消息" message:alertMessage delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
     
     [alertView show];
+   
+     /*
+       [self.window makeToast:alertMessage duration:2 position:CSToastPositionCenter];
+     */
     
     [self resetJPUSHBadge];
+    
+    
+    
 }
 -(void)resetJPUSHBadge{
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];

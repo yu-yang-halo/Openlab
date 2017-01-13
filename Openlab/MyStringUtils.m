@@ -9,12 +9,49 @@
 #import "MyStringUtils.h"
 
 @implementation MyStringUtils
++(BOOL)isVaildDomainAddr:(NSString *)domain{
+    /**
+     * 域名验证
+     */
+    NSString * PASSREG = @"(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\\.)+[a-zA-Z]{2,63}\\.?$)";
+    
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", PASSREG];
+    
+    
+    if ([regextestmobile evaluateWithObject:domain] == YES)
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
++(BOOL)isVaildIpAddr:(NSString *)ipaddr
+{
+    /**
+     * ip验证
+     */
+    NSString * PASSREG = @"^((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))$";
+    
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", PASSREG];
+    
+    
+    if ([regextestmobile evaluateWithObject:ipaddr] == YES)
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
 +(BOOL)isVaildPass:(NSString *)pass
 {
     /**
-     * 手机号码  简单判断11位数字
+     * 密码验证
      */
-    NSString * PASSREG = @"^[0-9a-zA-Z!#$%&^*_.?@]{6,20}$";
+    NSString * PASSREG = @"^[0-9a-zA-Z_]{6,20}$";
     
     NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", PASSREG];
     
@@ -27,6 +64,25 @@
     {
         return NO;
     }
+}
++(BOOL)isNumber:(NSString *)num{
+    /**
+     * 是不是数字
+     */
+    NSString * NUMBER = @"^\\d{2,7}$";
+    
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", NUMBER];
+    
+    
+    if ([regextestmobile evaluateWithObject:num] == YES)
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+
 }
 +(BOOL)isMobileNumber:(NSString *)mobileNum
 {

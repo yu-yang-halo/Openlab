@@ -47,8 +47,11 @@
     [self.vcodeBtn addTarget:self action:@selector(getVCode:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [firstResponderTF resignFirstResponder];
+}
 -(void)getVCode:(id)sender{
+    [firstResponderTF resignFirstResponder];
     NSString *phone =self.phoneTF.text;
     if(![MyStringUtils isMobileNumber:phone]){
         [self.view makeToast:@"请输入正确的手机号码"];
@@ -92,6 +95,8 @@
 */
 
 - (IBAction)fixPass:(id)sender {
+    [firstResponderTF resignFirstResponder];
+    
     NSString *loginName=self.numberTF.text;
     
     NSString *nepass=self.nePassTF.text;
@@ -101,15 +106,15 @@
     
     
     if([MyStringUtils isEmpty:loginName]){
-        [self.view.window makeToast:@"学生号不能为空"];
+        [self.view.window makeToast:@"学号或职工号不能为空"];
     }else if (![MyStringUtils isVaildPass:nepass]){
-        [self.view.window makeToast:@"密码至少为6个字符"];
-    }else if ([MyStringUtils isEmpty:vcode]){
-        [self.view.window makeToast:@"验证码不能为空"];
-    }else if (![MyStringUtils isMobileNumber:phone]){
-        [self.view.window makeToast:@"请输入正确的手机号"];
+        [self.view.window makeToast:@"密码由6-20位的字母、数字、下划线组成"];
     }else if (![nepass isEqualToString:repass]){
         [self.view.window makeToast:@"两次输入密码不一致"];
+    }else if (![MyStringUtils isMobileNumber:phone]){
+        [self.view.window makeToast:@"请输入正确的手机号"];
+    }else if ([MyStringUtils isEmpty:vcode]){
+        [self.view.window makeToast:@"验证码不能为空"];
     }else{
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             

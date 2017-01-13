@@ -7,6 +7,7 @@
 //
 
 #import "MyTabbarController.h"
+#import "Constants.h"
 @interface MyTabbarController()
 {
     NSArray *titles;
@@ -24,6 +25,8 @@
     self.title=titles[0];
     
     self.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc] initWithCustomView:[[UIView alloc] initWithFrame:CGRectZero]];
+    
+    [self.tabBar setTintColor:ICON_BG_COLOR_NORMAL];
     
 }
 

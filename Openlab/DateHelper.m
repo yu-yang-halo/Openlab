@@ -16,6 +16,27 @@
     NSInteger interval = [zone secondsFromGMTForDate:date];
     return [date dateByAddingTimeInterval:interval];
 }
++ (NSDate *)defaultDate {
+    NSDate *date = [NSDate date];
+    NSTimeZone *zone = [NSTimeZone systemTimeZone];
+    NSInteger interval = [zone secondsFromGMTForDate:date];
+    date=[date dateByAddingTimeInterval:interval];
+    
+    NSCalendar *greCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDateComponents *dateComponentsForDate = [greCalendar components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekCalendarUnit | NSWeekdayCalendarUnit | NSWeekOfMonthCalendarUnit | NSWeekOfYearCalendarUnit fromDate:date];
+    if(dateComponentsForDate.minute>=30){
+        [dateComponentsForDate setMinute:0];
+        [dateComponentsForDate setHour:dateComponentsForDate.hour+1];
+    }else{
+        [dateComponentsForDate setMinute:30];
+    }
+    
+    date = [greCalendar dateFromComponents:dateComponentsForDate];
+    
+    
+    return date;
+    
+}
 
 + (NSDate *)dateFromString:(NSString *)dateStr withFormat:(NSString *)format {
     NSDateFormatter *formatter = [NSDateFormatter new];

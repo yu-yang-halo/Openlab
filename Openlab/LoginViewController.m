@@ -34,6 +34,10 @@
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
     
+//    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithTitle:@"配置" style:(UIBarButtonItemStylePlain) target:self action:@selector(config:)];
+    
+    
+    
     
     
     [self.loginBtn.layer setCornerRadius:2.0];
@@ -57,6 +61,10 @@
     [self.loginBtn addTarget:self action:@selector(login:) forControlEvents:UIControlEventTouchUpInside];
     [self launch];
     
+}
+
+-(void)config:(id)sender{
+    [self performSegueWithIdentifier:@"toSettings" sender:nil];
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{

@@ -10,11 +10,13 @@
 #import "GDataXMLNode.h"
 #import "WsqMD5Util.h"
 #import "TimeUtils.h"
+#import "CacheManager.h"
 const static int DEFAULT_TIME_OUT=11;
-const static NSString* WEBSERVICE_IP=@"202.38.78.70";//202.38.78.70
-const static int WEBSERVICE_PORT=8080;
+const static NSString* WEBSERVICE_IP=@"192.168.2.151";//202.38.78.70
+const static NSString* WEBSERVICE_PORT=@"8080";
 const NSString* KEY_USERID=@"userID_KEY";
 const NSString* KEY_SECTOKEN=@"sectoken_KEY";
+const NSString* KEY_LOGINNAME=@"loginName_KEY";
 
 @interface ElApiService()
 #pragma mark errorCode handler
@@ -34,12 +36,20 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     @synchronized([ElApiService class]){
         if(shareService==nil){
             shareService=[[ElApiService alloc] init];
-            shareService.openlabUrl=[NSString stringWithFormat:@"http://%@:%d/elws/services/openlab/",WEBSERVICE_IP,WEBSERVICE_PORT];
-            shareService.authapiUrl=[NSString stringWithFormat:@"http://%@:%d/elws/services/authapi/",WEBSERVICE_IP,WEBSERVICE_PORT];
+            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [shareService readErrorCodePlistFile];
             });
         }
+        
+        NSArray *arr=[CacheManager fetchServerIpAndPort];
+        
+        WEBSERVICE_IP=arr[0];
+        WEBSERVICE_PORT=arr[1];
+        
+        shareService.openlabUrl=[NSString stringWithFormat:@"http://%@:%@/elws/services/openlab/",WEBSERVICE_IP,WEBSERVICE_PORT];
+        shareService.authapiUrl=[NSString stringWithFormat:@"http://%@:%@/elws/services/authapi/",WEBSERVICE_IP,WEBSERVICE_PORT];
+        
         return shareService;
     }
     
@@ -150,6 +160,9 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
  
     NSString *service=[NSString stringWithFormat:@"%@login?name=%@&password=%@",self.authapiUrl,name,pass];
     NSLog(@"login service:%@",service);
+    
+    
+    
     NSData *data=[self requestURLSync:service];
     if(data!=nil){
         GDataXMLElement *rootElement=[self getRootElementByData:data];
@@ -163,6 +176,8 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
         if([errorCodeVal isEqualToString:@"0"]){
             [[NSUserDefaults standardUserDefaults] setObject:userIdVal forKey:KEY_USERID];
             [[NSUserDefaults standardUserDefaults] setObject:secTokenVal forKey:KEY_SECTOKEN];
+            
+            [[NSUserDefaults standardUserDefaults] setObject:name forKey:KEY_LOGINNAME];
             
             return YES;
         }else{
@@ -183,6 +198,10 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
        secToken=@"0";
     }
     NSMutableString *appendStr=[[NSMutableString alloc] init];
+    if(loginName==nil){
+        loginName=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_LOGINNAME];
+        NSLog(@"cache loginname %@",loginName);
+    }
     
     if(loginName!=nil){
         [appendStr appendFormat:@"&name=%@",loginName];
@@ -196,6 +215,7 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
     }else{
         [appendStr appendFormat:@"&userRole=%@",@"student"];
     }
+    
     if(vcode!=nil){
         [appendStr appendFormat:@"&vCode=%@",vcode];
     }
@@ -413,6 +433,11 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
             if (yearVal==nil||semesterVal==nil) {
                 return @[@"2018",@"1"];
             }
+            
+            if([semesterVal intValue]>3){
+                semesterVal=@"3";
+            }
+            
             return @[yearVal,semesterVal];
         }else{
             [self notificationErrorCode:errorCodeVal];
@@ -446,8 +471,6 @@ const NSString* KEY_SECTOKEN=@"sectoken_KEY";
                if(year==nil){
                     continue;
                }
-                
-                
                [years addObject:year];
                 
             }

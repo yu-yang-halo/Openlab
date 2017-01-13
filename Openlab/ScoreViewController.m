@@ -30,7 +30,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.semeArr=@[@"第一学期",@"第二学期"];
+    self.semeArr=@[@"第一学期",@"第二学期",@"第三学期"];
     self.yearArr=@[@"2016",@"2017"];
     selectYear=-1;
     selectSemester=-1;
