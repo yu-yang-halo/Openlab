@@ -86,7 +86,7 @@
         [self setBackgroundColor:[UIColor redColor]];
         [self setTitle:@"预约失败" forState:UIControlStateNormal];
     }else if(state==UIButtonState_NORMAL){
-        [self setBackgroundColor:[UIColor colorWithRed:0/255.0 green:122/255.0 blue:255/255.0 alpha:1]];
+        [self setBackgroundColor:[UIColor colorWithRed:0/255.0 green:64/255.0 blue:152/255.0 alpha:1]];
         [self setTitle:@"开始预约" forState:UIControlStateNormal];
     }
     

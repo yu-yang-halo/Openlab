@@ -17,6 +17,7 @@
     double  duration;
     NSInteger timeVal;
 }
+@property (weak, nonatomic) IBOutlet UIButton *commitButton;
 @property (weak, nonatomic) IBOutlet UITextField *nePassTF;
 @property (weak, nonatomic) IBOutlet UITextField *rePassTF;
 - (IBAction)fixPass:(id)sender;
@@ -29,6 +30,7 @@
     self.title=@"修改密码";
     self.nePassTF.delegate=self;
     self.rePassTF.delegate=self;
+    self.commitButton.layer.cornerRadius=5.0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];

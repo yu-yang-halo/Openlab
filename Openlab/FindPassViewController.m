@@ -23,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *rePassTF;
 @property (weak, nonatomic) IBOutlet UITextField *vcodeTF;
 @property (weak, nonatomic) IBOutlet UIButton *vcodeBtn;
+@property (weak, nonatomic) IBOutlet UIButton *commitButton;
+
 - (IBAction)fixPass:(id)sender;
 
 @end
@@ -38,6 +40,7 @@
     self.rePassTF.delegate=self;
     self.vcodeTF.delegate=self;
     self.phoneTF.delegate=self;
+    self.commitButton.layer.cornerRadius=5.0;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     

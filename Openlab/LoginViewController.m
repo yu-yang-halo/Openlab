@@ -31,6 +31,8 @@
     self.loginNameTF.delegate=self;
     self.passwordTF.delegate=self;
     
+
+    
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
     
@@ -40,7 +42,7 @@
     
     
     
-    [self.loginBtn.layer setCornerRadius:2.0];
+    [self.loginBtn.layer setCornerRadius:5.0];
     
     [self.loginBtn setBackgroundColor:BUTTON_BG_COLOR_NORMAL forState:UIControlStateNormal];
     

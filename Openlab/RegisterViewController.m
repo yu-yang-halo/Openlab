@@ -42,7 +42,7 @@
     self.title=@"用户注册";
     
     
-    [self.registerBtn.layer setCornerRadius:2.0];
+    [self.registerBtn.layer setCornerRadius:5.0];
     
     self.numberTF.delegate=self;
     self.passwordTF.delegate=self;

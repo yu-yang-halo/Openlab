@@ -12,7 +12,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    self.cancelBtn.layer.cornerRadius=4;
+    self.cancelBtn.layer.cornerRadius=5.0;
     self.cancelBtn.layer.borderColor=[[UIColor colorWithRed:1 green:0 blue:0 alpha:0.7] CGColor];
     self.cancelBtn.layer.borderWidth=1;
     [self.cancelBtn setTitleColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:0.7] forState:UIControlStateNormal];
