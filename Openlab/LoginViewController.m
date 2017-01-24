@@ -36,7 +36,7 @@
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
     
-//    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithTitle:@"配置" style:(UIBarButtonItemStylePlain) target:self action:@selector(config:)];
+    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithTitle:@"配置" style:(UIBarButtonItemStylePlain) target:self action:@selector(config:)];
     
     
     

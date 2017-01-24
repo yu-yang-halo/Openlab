@@ -899,7 +899,7 @@
 					"\"SystemConfiguration\"",
 					"-lxml2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = cn.lztech.Openlab;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.lztech.valve;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -953,7 +953,7 @@
 					"\"SystemConfiguration\"",
 					"-lxml2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = cn.lztech.Openlab;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.lztech.valve;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
