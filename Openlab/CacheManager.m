@@ -9,7 +9,7 @@
 #import "CacheManager.h"
 static NSString *KEY_IP=@"key_ip";
 static NSString *KEY_PORT=@"key_port";
-static NSString *defaultIP=@"202.38.78.70";
+static NSString *defaultIP=@"etcis.ustc.edu.cn";
 static NSString *defaultPort=@"8080";
 @implementation CacheManager
 +(NSArray *)fetchServerIpAndPort{

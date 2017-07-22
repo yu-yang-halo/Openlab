@@ -99,7 +99,7 @@
         
         
         for (CourseType *course in courseTypeList) {
-            ScoreType *scoreType=[[ElApiService shareElApiService] getStudentScoreList:course.courseCode];
+            ScoreType *scoreType=[[ElApiService shareElApiService] getStudentScoreList:course.courseId];
             if(scoreType==nil){
                 continue;
             }

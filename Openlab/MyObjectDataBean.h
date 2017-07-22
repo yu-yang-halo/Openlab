@@ -68,6 +68,7 @@ typedef NS_ENUM(NSInteger,Semester){
 @interface AssignmentType : NSObject
 @property(nonatomic,assign) int asId;
 @property(nonatomic,assign) int createdBy;
+@property(nonatomic,assign) int courseId;
 @property(nonatomic,strong) NSString *courseCode;
 @property(nonatomic,strong) NSString *topic;
 @property(nonatomic,assign) int status;//
@@ -84,8 +85,7 @@ typedef NS_ENUM(NSInteger,Semester){
 @property(nonatomic,assign) int givenBy;
 @property(nonatomic,assign) int  status;
 @property(nonatomic,assign) float score;
-
-@property(nonatomic,strong) NSString *courseCode;
+@property(nonatomic,assign) int courseId;
 @property(nonatomic,strong) NSString *desc;
 @property(nonatomic,strong) NSString *attachFileName;
 @property(nonatomic,strong) NSString *submitTime;
@@ -100,6 +100,7 @@ typedef NS_ENUM(NSInteger,Semester){
 
 @interface ScoreType : NSObject
 @property(nonatomic,assign) int studentId;
+@property(nonatomic,assign) int courseId;
 @property(nonatomic,strong) NSString *courseCode;
 @property(nonatomic,assign) float score;
 @property(nonatomic,strong) NSString *comment;
@@ -110,6 +111,7 @@ typedef NS_ENUM(NSInteger,Semester){
 
 
 @interface CourseType : NSObject
+@property(nonatomic,assign) int courseId;
 @property(nonatomic,strong) NSString *courseCode;
 @property(nonatomic,strong) NSString *name;
 @property(nonatomic,strong) NSString *desc;

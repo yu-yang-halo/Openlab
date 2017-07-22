@@ -182,7 +182,7 @@
    
     vc.reportList=reportInfos;
     vc.assignmentId=assignmentType.asId;
-    vc.courseCode=assignmentType.courseCode;
+    vc.courseId=assignmentType.courseId;
     vc.title=assignmentType.desc;
     
     
@@ -264,7 +264,7 @@
     CourseType *courseType=[_courseDatas objectAtIndex:selectCourseIndex];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        _block(courseType.courseCode,useCache);
+        _block(courseType.courseId,useCache);
         dispatch_async(dispatch_get_main_queue(), ^{
             if([[_courseDatas objectAtIndex:selectCourseIndex] isExpandYN]){
                 [[_courseDatas objectAtIndex:selectCourseIndex] setIsExpandYN:NO];

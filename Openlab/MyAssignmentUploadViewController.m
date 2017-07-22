@@ -202,7 +202,7 @@
             
             NSString *base64String=[ImageUtils encodeToBase64String:image format:@"PNG"];
             
-            uploadSUC=[[ElApiService shareElApiService] submitReport:_courseCode file:base64String desc:desc assignmentId:_assignmentId];
+            uploadSUC=[[ElApiService shareElApiService] submitReport:_courseId file:base64String desc:desc assignmentId:_assignmentId];
             
             if(!uploadSUC){
                 break;

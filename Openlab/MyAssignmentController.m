@@ -55,17 +55,17 @@
 
     [_tableView setViewControllerDelegate:self];
     [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
-    [_tableView beginLoadChildData:^(NSString *courseCode,BOOL useCache) {
+    [_tableView beginLoadChildData:^(int courseId,BOOL useCache) {
         
-        if(![self hasExists:courseCode]||!useCache){
-            Turple *turple=[[ElApiService shareElApiService] getAssignmentList:courseCode];
+        if(![self hasExists:courseId]||!useCache){
+            Turple *turple=[[ElApiService shareElApiService] getAssignmentList:courseId];
             
-            ScoreType *scoreType=[[ElApiService shareElApiService] getStudentScoreList:courseCode];
+            ScoreType *scoreType=[[ElApiService shareElApiService] getStudentScoreList:courseId];
             
             if(scoreType.status==1){
                 turple.scoreType=scoreType;
             }
-            [self addAssignments:turple toCourseCode:courseCode];
+            [self addAssignments:turple toCourseId:courseId];
         }
         
         
@@ -142,11 +142,11 @@
 }
 
 
--(BOOL)hasExists:(NSString *)courseCode{
+-(BOOL)hasExists:(int)courseId{
     BOOL hasYN=NO;
     for (int i=0;i<[_courseTypeList count];i++) {
         CourseType *courseType=[_courseTypeList objectAtIndex:i];
-        if([courseType.courseCode isEqualToString:courseCode]){
+        if(courseType.courseId ==courseId){
             if(courseType.assignmentTypes!=nil){
               hasYN=YES;
             }
@@ -158,10 +158,10 @@
     return hasYN;
 }
 
--(void)addAssignments:(Turple *)turple toCourseCode:(NSString *)courseCode{
+-(void)addAssignments:(Turple *)turple toCourseId:(int)courseId{
     for (int i=0;i<[_courseTypeList count];i++) {
         CourseType *courseType=[_courseTypeList objectAtIndex:i];
-        if([courseType.courseCode isEqualToString:courseCode]){
+        if(courseType.courseId==courseId){
             
             [courseType setAssignmentTypes:turple.assignmentTypes];
             [courseType setReportInfos:turple.reportInfos];

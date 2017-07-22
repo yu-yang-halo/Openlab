@@ -11,5 +11,5 @@
 @interface MyAssignmentUploadViewController : UIViewController
 @property(nonatomic,strong) NSArray *reportList;
 @property(nonatomic,assign) int assignmentId;
-@property(nonatomic,strong) NSString *courseCode;
+@property(nonatomic,assign) int courseId;
 @end

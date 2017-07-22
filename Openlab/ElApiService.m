@@ -12,7 +12,7 @@
 #import "TimeUtils.h"
 #import "CacheManager.h"
 const static int DEFAULT_TIME_OUT=11;
-const static NSString* WEBSERVICE_IP=@"192.168.2.151";//202.38.78.70
+const static NSString* WEBSERVICE_IP=@"etcis.ustc.edu.cn";//202.38.78.70
 const static NSString* WEBSERVICE_PORT=@"8080";
 const NSString* KEY_USERID=@"userID_KEY";
 const NSString* KEY_SECTOKEN=@"sectoken_KEY";
@@ -569,7 +569,7 @@ const NSString* KEY_LOGINNAME=@"loginName_KEY";
     return nil;
 }
 
--(BOOL)AddOrUpdAssignment:(int)asId courseCode:(NSString *)arg0 desc:(NSString *)arg1 dueDate:(NSString *)arg2{
+-(BOOL)AddOrUpdAssignment:(int)asId courseId:(int)arg0 desc:(NSString *)arg1 dueDate:(NSString *)arg2{
     NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
     NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
     NSMutableString *appendStr=[[NSMutableString alloc] init];
@@ -579,7 +579,7 @@ const NSString* KEY_LOGINNAME=@"loginName_KEY";
         
     }
     
-    NSString *service=[NSString stringWithFormat:@"%@AddOrUpdAssignment?senderId=%@&secToken=%@&asId=%d&courseCode=%@&desc=%@%@",self.openlabUrl,userID,secToken,asId,arg0,arg1,appendStr];
+    NSString *service=[NSString stringWithFormat:@"%@AddOrUpdAssignment?senderId=%@&secToken=%@&asId=%d&courseId=%d&desc=%@%@",self.openlabUrl,userID,secToken,asId,arg0,arg1,appendStr];
     
     NSLog(@"AddOrUpdAssignment service:%@",service);
     NSData *data=[self requestURLSync:service];
@@ -600,7 +600,7 @@ const NSString* KEY_LOGINNAME=@"loginName_KEY";
     
 }
 
--(BOOL)submitReport:(NSString *)courseCode file:(NSString *)arg0 desc:(NSString *)arg1 assignmentId:(int)arg2{
+-(BOOL)submitReport:(int)courseId file:(NSString *)arg0 desc:(NSString *)arg1 assignmentId:(int)arg2{
     NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
     NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
     NSMutableString *appendStr=[[NSMutableString alloc] init];
@@ -618,7 +618,7 @@ const NSString* KEY_LOGINNAME=@"loginName_KEY";
     
     NSLog(@"submitReport service:%@",service);
     NSMutableData *postBody=[[NSMutableData alloc] init];
-    NSString *param=[NSString stringWithFormat:@"senderId=%@&secToken=%@&courseCode=%@&file=%@%@",userID,secToken,courseCode,arg0,appendStr] ;
+    NSString *param=[NSString stringWithFormat:@"senderId=%@&secToken=%@&courseId=%d&file=%@%@",userID,secToken,courseId,arg0,appendStr] ;
     
     
     [postBody appendData:[param dataUsingEncoding:NSUTF8StringEncoding]];
@@ -644,10 +644,10 @@ const NSString* KEY_LOGINNAME=@"loginName_KEY";
     
 }
 
--(ScoreType *)getStudentScoreList:(NSString *)courseCode{
+-(ScoreType *)getStudentScoreList:(int)courseId{
     NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
     NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
-    NSString *service=[NSString stringWithFormat:@"%@getStudentScoreList?senderId=%@&secToken=%@&userId=%@&courseCode=%@",self.openlabUrl,userID,secToken,userID,courseCode];
+    NSString *service=[NSString stringWithFormat:@"%@getStudentScoreList?senderId=%@&secToken=%@&userId=%@&courseId=%d",self.openlabUrl,userID,secToken,userID,courseId];
     
     NSLog(@"getStudentScoreList service:%@",service);
     NSData *data=[self requestURLSync:service];
@@ -734,7 +734,7 @@ const NSString* KEY_LOGINNAME=@"loginName_KEY";
 
 
 
--(Turple *)getAssignmentList:(NSString *)courseCode{
+-(Turple *)getAssignmentList:(int)courseId{
     NSString *userID=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_USERID];
     NSString *secToken=[[NSUserDefaults standardUserDefaults] objectForKey:KEY_SECTOKEN];
     
@@ -742,8 +742,8 @@ const NSString* KEY_LOGINNAME=@"loginName_KEY";
     Turple *turple=[[Turple alloc] init];
     
     
-    if(courseCode!=nil){
-        [appendStr appendFormat:@"&courseCode=%@",courseCode];
+    if(courseId>0){
+        [appendStr appendFormat:@"&courseId=%d",courseId];
         
     }
     
@@ -840,7 +840,7 @@ const NSString* KEY_LOGINNAME=@"loginName_KEY";
     reportInfo.reportId=[[[[element elementsForName:@"reportId"] objectAtIndex:0] stringValue] intValue];
     reportInfo.userId=[[[[element elementsForName:@"userId"] objectAtIndex:0] stringValue] intValue];
     reportInfo.assignmentId=[[[[element elementsForName:@"assignmentId"] objectAtIndex:0] stringValue] intValue];
-    reportInfo.courseCode=[[[element elementsForName:@"courseCode"] objectAtIndex:0] stringValue];
+    reportInfo.courseId=[[[[element elementsForName:@"courseId"] objectAtIndex:0] stringValue] intValue];
     reportInfo.desc=[[[element elementsForName:@"description"] objectAtIndex:0] stringValue];
     reportInfo.attachFileName=[[[element elementsForName:@"attachFileName"] objectAtIndex:0] stringValue];
     reportInfo.submitTime=[[[element elementsForName:@"submitTime"] objectAtIndex:0] stringValue];
@@ -857,6 +857,8 @@ const NSString* KEY_LOGINNAME=@"loginName_KEY";
 -(AssignmentType *)parseAssignmentTypeXML:(GDataXMLElement *)element{
     AssignmentType *assignmentType=[[AssignmentType alloc] init];
     assignmentType.asId=[[[[element elementsForName:@"id"] objectAtIndex:0] stringValue] intValue];
+    assignmentType.courseId=[[[[element elementsForName:@"courseId"] objectAtIndex:0] stringValue] intValue];
+    
     assignmentType.createdBy=[[[[element elementsForName:@"createdBy"] objectAtIndex:0] stringValue] intValue];
     
     assignmentType.courseCode=[[[element elementsForName:@"courseCode"] objectAtIndex:0] stringValue];
@@ -875,6 +877,7 @@ const NSString* KEY_LOGINNAME=@"loginName_KEY";
 -(ScoreType *)parseScoreTypeXML:(GDataXMLElement *)element{
     ScoreType *scoreType=[[ScoreType alloc] init];
     scoreType.studentId=[[[[element elementsForName:@"studentId"] objectAtIndex:0] stringValue] intValue];
+    scoreType.courseId=[[[[element elementsForName:@"courseId"] objectAtIndex:0] stringValue] intValue];
     scoreType.courseCode=[[[element elementsForName:@"courseCode"] objectAtIndex:0] stringValue];
     scoreType.score=[[[[element elementsForName:@"score"] objectAtIndex:0] stringValue] floatValue];
     scoreType.comment=[[[element elementsForName:@"comment"] objectAtIndex:0] stringValue];
@@ -903,6 +906,9 @@ const NSString* KEY_LOGINNAME=@"loginName_KEY";
 -(CourseType *)parseCourseTypeXML:(GDataXMLElement *)element{
     CourseType *courseType=[[CourseType alloc] init];
     courseType.courseCode=[[[element elementsForName:@"courseCode"] objectAtIndex:0] stringValue];
+    courseType.courseId=[[[[element elementsForName:@"courseId"] objectAtIndex:0] stringValue] intValue];
+    
+    
     courseType.name=[[[element elementsForName:@"name"] objectAtIndex:0] stringValue];
     courseType.desc=[[[element elementsForName:@"desc"] objectAtIndex:0] stringValue];
     courseType.year=[[[[element elementsForName:@"year"] objectAtIndex:0] stringValue] intValue];

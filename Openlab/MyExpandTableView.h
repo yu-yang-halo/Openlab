@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MyObjectDataBean.h"
-typedef void (^ChildDataLoadBlock)(NSString *courseCode,BOOL useCache);
+typedef void (^ChildDataLoadBlock)(int courseId,BOOL useCache);
 @interface MyExpandTableView : UITableView<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) NSArray<CourseType *> *courseDatas;
 @property(nonatomic,weak) UIViewController *viewControllerDelegate;
